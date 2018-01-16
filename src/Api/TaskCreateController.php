@@ -13,6 +13,7 @@ namespace TeamELF\Ext\Task\Api;
 
 use Symfony\Component\HttpFoundation\Response;
 use TeamELF\Ext\Task\Task;
+use TeamELF\Ext\Task\TaskAssignee;
 use TeamELF\Http\AbstractController;
 
 class TaskCreateController extends AbstractController
@@ -26,10 +27,14 @@ class TaskCreateController extends AbstractController
      */
     public function handler(): Response
     {
-        $task = new Task([
-            'name' => date('Y-m-d', time()) . ' 新任务'
-        ]);
-        $task->save();
+        $task = (new Task())
+            ->name(date('Y-m-d', time()) . ' 新任务')
+            ->save();
+        (new TaskAssignee())
+            ->assignee($this->getAuth())
+            ->task($task)
+            ->admin(true)
+            ->save();
         return response([
             'id' => $task->getId()
         ]);

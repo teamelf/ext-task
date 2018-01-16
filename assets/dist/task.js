@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
-System.register("teamelf/task/TaskAssigneeUpdater", [], function (_export, _context) {
+System.register('teamelf/task/TaskAssigneeUpdater', [], function (_export, _context) {
   "use strict";
 
-  var _createClass, _antd, Card, Input, AutoComplete, _class;
+  var _createClass, _antd, Card, Input, List, Icon, Avatar, _class;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -59,7 +59,9 @@ System.register("teamelf/task/TaskAssigneeUpdater", [], function (_export, _cont
       _antd = antd;
       Card = _antd.Card;
       Input = _antd.Input;
-      AutoComplete = _antd.AutoComplete;
+      List = _antd.List;
+      Icon = _antd.Icon;
+      Avatar = _antd.Avatar;
 
       _class = function (_React$Component) {
         _inherits(_class, _React$Component);
@@ -70,14 +72,17 @@ System.register("teamelf/task/TaskAssigneeUpdater", [], function (_export, _cont
           var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this, props));
 
           _this.state = {
-            members: []
+            members: [],
+            assignees: [],
+            username: ''
           };
           _this.fetchMembers();
+          _this.fetchAssignees();
           return _this;
         }
 
         _createClass(_class, [{
-          key: "fetchMembers",
+          key: 'fetchMembers',
           value: function fetchMembers() {
             var _this2 = this;
 
@@ -91,19 +96,83 @@ System.register("teamelf/task/TaskAssigneeUpdater", [], function (_export, _cont
             });
           }
         }, {
-          key: "render",
-          value: function render() {
-            return React.createElement(Card, {
-              style: { marginBottom: 16 },
-              title: "\u6307\u6D3E\u4EFB\u52A1\u7ED9"
+          key: 'fetchAssignees',
+          value: function fetchAssignees() {
+            var _this3 = this;
+
+            axios.get('task/' + this.props.id + '/assignee').then(function (r) {
+              _this3.setState({ assignees: r.data });
             });
+          }
+        }, {
+          key: 'createAssignee',
+          value: function createAssignee() {
+            var _this4 = this;
+
+            var data = {
+              username: this.state.username
+            };
+            axios.post('task/' + this.props.id + '/assignee', data).then(function (r) {
+              _this4.setState({ username: '' });
+              _this4.fetchAssignees();
+            });
+          }
+        }, {
+          key: 'deleteAssignee',
+          value: function deleteAssignee(assigneeId) {
+            var _this5 = this;
+
+            axios.delete('task/' + this.props.id + '/assignee/' + assigneeId).then(function (r) {
+              _this5.fetchAssignees();
+            });
+          }
+        }, {
+          key: 'render',
+          value: function render() {
+            var _this6 = this;
+
+            var SearchAssignee = React.createElement(Input, {
+              value: this.state.username,
+              onChange: function onChange(e) {
+                return _this6.setState({ username: e.target.value });
+              },
+              onPressEnter: this.createAssignee.bind(this)
+            });
+            return React.createElement(
+              Card,
+              {
+                style: { marginBottom: 16 },
+                title: '\u6307\u6D3E\u4EFB\u52A1\u7ED9',
+                extra: SearchAssignee
+              },
+              React.createElement(List, {
+                itemLayout: 'horizontal',
+                dataSource: this.state.assignees,
+                renderItem: function renderItem(o) {
+                  return React.createElement(
+                    List.Item,
+                    { actions: [React.createElement(
+                        'a',
+                        { onClick: _this6.deleteAssignee.bind(_this6, o.id) },
+                        React.createElement(Icon, { type: 'close' })
+                      )] },
+                    React.createElement(List.Item.Meta, {
+                      avatar: React.createElement(Avatar, null),
+                      title: o.name,
+                      description: o.username
+                    }),
+                    o.admin && React.createElement(Icon, { type: 'compass' })
+                  );
+                }
+              })
+            );
           }
         }]);
 
         return _class;
       }(React.Component);
 
-      _export("default", _class);
+      _export('default', _class);
     }
   };
 });
@@ -574,7 +643,7 @@ System.register('teamelf/task/TaskList', ['teamelf/layout/Page', 'teamelf/task/T
           key: 'createTask',
           value: function createTask() {
             axios.post('task').then(function (r) {
-              window.location.href = '/task/' + r.data.id;
+              window.location.href = '/task/' + r.data.id + '?mode=edit';
             });
           }
         }, {
@@ -842,7 +911,6 @@ System.register('teamelf/task/TaskProcessUpdater', [], function (_export, _conte
               Button,
               {
                 type: 'primary',
-                size: 'small',
                 onClick: this.showEditor.bind(this, null)
               },
               React.createElement(Icon, { type: 'plus' }),

@@ -29,7 +29,7 @@ export default class extends Page {
   }
   createTask () {
     axios.post('task').then(r => {
-      window.location.href = '/task/' + r.data.id;
+      window.location.href = '/task/' + r.data.id + '?mode=edit';
     });
   }
   description () {

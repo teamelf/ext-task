@@ -118,7 +118,6 @@ export default class extends React.Component {
     const TaskProcessCreateButton = (
       <Button
         type="primary"
-        size="small"
         onClick={this.showEditor.bind(this, null)}
       >
         <Icon type="plus"/>

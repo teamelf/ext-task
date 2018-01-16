@@ -12,6 +12,9 @@
 namespace TeamELF\Ext\Task\Listener;
 
 use TeamELF\Event\RoutesWillBeLoaded;
+use TeamELF\Ext\Task\Api\AssigneeCreateController;
+use TeamELF\Ext\Task\Api\AssigneeDeleteController;
+use TeamELF\Ext\Task\Api\AssigneeListController;
 use TeamELF\Ext\Task\Api\ProcessCreateController;
 use TeamELF\Ext\Task\Api\ProcessDeleteController;
 use TeamELF\Ext\Task\Api\ProcessListController;
@@ -46,9 +49,9 @@ class RoutesListener
             ->delete('task-process-delete', '/{processId}', ProcessDeleteController::class)
 
             ->prefix('/api/task/{taskId}/assignee')
-            ->get('task-assignee-view', '')
-            ->post('task-assignee-create', '/{assigneeId}')
-            ->delete('task-assignee-delete', '/{assigneeId}')
+            ->get('task-assignee-list', '', AssigneeListController::class)
+            ->post('task-assignee-create', '', AssigneeCreateController::class)
+            ->delete('task-assignee-delete', '/{assigneeId}', AssigneeDeleteController::class)
 
             ->prefix('/api/task/{taskId}/report')
             ->get('task-report-view', '')

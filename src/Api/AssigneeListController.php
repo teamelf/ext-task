@@ -14,10 +14,11 @@ namespace TeamELF\Ext\Task\Api;
 use Symfony\Component\HttpFoundation\Response;
 use TeamELF\Exception\HttpNotFoundException;
 use TeamELF\Ext\Task\Task;
+use TeamELF\Ext\Task\TaskAssignee;
 use TeamELF\Ext\Task\TaskProcess;
 use TeamELF\Http\AbstractController;
 
-class ProcessListController extends AbstractController
+class AssigneeListController extends AbstractController
 {
     protected $needPermissions = ['task.item'];
 
@@ -33,11 +34,12 @@ class ProcessListController extends AbstractController
             throw new HttpNotFoundException();
         }
         $response = [];
-        foreach (TaskProcess::where(['task' => $task], ['createdAt' => 'ASC']) as $process) {
+        foreach (TaskAssignee::where(['task' => $task], ['createdAt' => 'ASC']) as $assignee) {
             $response[] = [
-                'id' => $process->getId(),
-                'title' => $process->getTitle(),
-                'description' => $process->getDescription()
+                'id' => $assignee->getId(),
+                'username' => $assignee->getAssignee()->getUsername(),
+                'name' => $assignee->getAssignee()->getName(),
+                'admin' => $assignee->isAdmin()
             ];
         }
         return response($response);

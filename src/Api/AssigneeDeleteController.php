@@ -12,13 +12,15 @@
 namespace TeamELF\Ext\Task\Api;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use TeamELF\Exception\HttpForbiddenException;
 use TeamELF\Ext\Task\Task;
+use TeamELF\Ext\Task\TaskAssignee;
 use TeamELF\Ext\Task\TaskProcess;
 use TeamELF\Http\AbstractController;
 
-class ProcessCreateController extends AbstractController
+class AssigneeDeleteController extends AbstractController
 {
     protected $needPermissions = ['task.update'];
 
@@ -30,21 +32,13 @@ class ProcessCreateController extends AbstractController
      */
     public function handler(): Response
     {
-        $data = $this->validate([
-            'title' => [
-                new NotBlank()
-            ],
-            'description' => []
-        ]);
         $task = Task::find($this->getParameter('taskId'));
-        if (!$task) {
+        $assignee = TaskAssignee::find($this->getParameter('assigneeId'));
+        if (!$task || !$assignee || $assignee->getTask()->getId() !== $task->getId()
+            || !$task->isDraft() || $assignee->isAdmin()) {
             throw new HttpForbiddenException();
         }
-        $process = (new TaskProcess($data))
-            ->task($task)
-            ->save();
-        return response([
-            'id' => $process->getId()
-        ]);
+        $assignee->delete(true);
+        return response();
     }
 }

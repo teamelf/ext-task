@@ -42,9 +42,9 @@ class TaskAssignee extends AbstractModel
     /**
      * @var boolean
      *
-     * @Column(type="boolean", options={"default":TRUE})
+     * @Column(type="boolean", options={"default":FALSE})
      */
-    protected $admin = true;
+    protected $admin = false;
 
 
     // ----------------------------------------
@@ -101,7 +101,7 @@ class TaskAssignee extends AbstractModel
      */
     public function isAdmin()
     {
-        return $this->admin;
+        return !!$this->admin;
     }
 
     /**
