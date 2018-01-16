@@ -17,7 +17,7 @@ import TaskItem from 'teamelf/task/TaskItem';
 extend(App.prototype, 'routes', routes => {
   routes.push(
     {path: '/task', exact: true, component: TaskList},
-    {path: '/task/:id', exact: true, component: TaskItem},
+    {path: '/task/:id', exact: true, component: TaskItem}
   );
 });
 
@@ -35,6 +35,7 @@ extend(Permission.prototype, 'permissions', permissions => {
       {name: '查看任务详情', permission: 'task.item'},
       {name: '创新新任务', permission: 'task.create'},
       {name: '更新任务', permission: 'task.update'},
+      {name: '发布任务', permission: 'task.publish'},
       {name: '删除未发布的任务', permission: 'task.delete'}
     ]
   });

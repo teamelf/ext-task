@@ -12,7 +12,11 @@
 namespace TeamELF\Ext\Task\Listener;
 
 use TeamELF\Event\RoutesWillBeLoaded;
+use TeamELF\Ext\Task\Api\TaskCreateController;
+use TeamELF\Ext\Task\Api\TaskItemController;
 use TeamELF\Ext\Task\Api\TaskListController;
+use TeamELF\Ext\Task\Api\TaskPublishController;
+use TeamELF\Ext\Task\Api\TaskUpdateController;
 
 class RoutesListener
 {
@@ -26,9 +30,10 @@ class RoutesListener
         $event->getRouter()
             ->prefix('/api/task')
             ->get('task-list', '', TaskListController::class)
-            ->post('task-create', '')
-            ->put('task-update', '/{id}')
-            ->put('task-view', '/{id}')
+            ->post('task-create', '', TaskCreateController::class)
+            ->get('task-view', '/{taskId}', TaskItemController::class)
+            ->put('task-update', '/{taskId}', TaskUpdateController::class)
+            ->post('task-publish', '/{taskId}', TaskPublishController::class)
 
             ->prefix('/api/task/{taskId}/process')
             ->get('task-process-view', '')

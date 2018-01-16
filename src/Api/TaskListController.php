@@ -12,6 +12,7 @@
 namespace TeamELF\Ext\Task\Api;
 
 use Symfony\Component\HttpFoundation\Response;
+use TeamELF\Ext\Task\Task;
 use TeamELF\Http\AbstractController;
 
 class TaskListController extends AbstractController
@@ -25,6 +26,17 @@ class TaskListController extends AbstractController
      */
     public function handler(): Response
     {
-        return response([]);
+        $response = [];
+        foreach (Task::all() as $task) {
+            $response[] = [
+                'id' => $task->getId(),
+                'createdAt' => $task->getCreatedAt() ? $task->getCreatedAt()->getTimestamp() : null,
+                'name' => $task->getName(),
+                'abstract' => $task->getAbstract(),
+                'teamwork' => $task->isTeamwork(),
+                'draft' => $task->isDraft()
+            ];
+        }
+        return response($response);
     }
 }

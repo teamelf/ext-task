@@ -32,7 +32,7 @@ class Task extends AbstractModel
     /**
      * @var string
      *
-     * @Column(type="text")
+     * @Column(type="text", nullable=TRUE)
      */
     protected $introduction;
 
@@ -177,4 +177,19 @@ class Task extends AbstractModel
 
     // ----------------------------------------
     // | HELPER FUNCTIONS
+
+    /**
+     * get abstract of $introduction
+     *
+     * @return string
+     */
+    public function getAbstract()
+    {
+        $introduction = $this->getIntroduction();
+        if (mb_strlen($introduction) > 97) {
+            return mb_substr($introduction, 0, 97) . '...';
+        } else {
+            return $introduction;
+        }
+    }
 }
