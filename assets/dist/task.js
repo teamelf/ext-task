@@ -619,12 +619,12 @@ System.register('teamelf/task/TaskList', ['teamelf/layout/Page', 'teamelf/task/T
     }
   };
 });
-"use strict";
+'use strict';
 
-System.register("teamelf/task/TaskProcessUpdater", [], function (_export, _context) {
+System.register('teamelf/task/TaskProcessUpdater', [], function (_export, _context) {
   "use strict";
 
-  var _createClass, _antd, Card, Timeline, _class;
+  var _createClass, _antd, Card, Button, Icon, Timeline, Modal, Input, _class;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -679,67 +679,252 @@ System.register("teamelf/task/TaskProcessUpdater", [], function (_export, _conte
 
       _antd = antd;
       Card = _antd.Card;
+      Button = _antd.Button;
+      Icon = _antd.Icon;
       Timeline = _antd.Timeline;
+      Modal = _antd.Modal;
+      Input = _antd.Input;
 
       _class = function (_React$Component) {
         _inherits(_class, _React$Component);
 
-        function _class() {
+        function _class(props) {
           _classCallCheck(this, _class);
 
-          return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+          var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this, props));
+
+          _this.state = {
+            processes: [],
+            modal: {},
+            processTitle: '',
+            processDescription: ''
+          };
+          _this.fetchProcesses();
+          return _this;
         }
 
         _createClass(_class, [{
-          key: "render",
+          key: 'fetchProcesses',
+          value: function fetchProcesses() {
+            var _this2 = this;
+
+            return axios.get('task/' + this.props.id + '/process').then(function (r) {
+              _this2.setState({ processes: r.data });
+              return r;
+            });
+          }
+        }, {
+          key: 'createTaskProcess',
+          value: function createTaskProcess() {
+            var _this3 = this;
+
+            var data = {
+              title: this.state.processTitle,
+              description: this.state.processDescription
+            };
+            return axios.post('task/' + this.props.id + '/process', data).then(function (r) {
+              _this3.fetchProcesses();
+              return r;
+            });
+          }
+        }, {
+          key: 'updateTaskProcess',
+          value: function updateTaskProcess(processId) {
+            var _this4 = this;
+
+            var data = {
+              title: this.state.processTitle,
+              description: this.state.processDescription
+            };
+            return axios.put('task/' + this.props.id + '/process/' + processId, data).then(function (r) {
+              _this4.fetchProcesses();
+              return r;
+            });
+          }
+        }, {
+          key: 'deleteTaskProcess',
+          value: function deleteTaskProcess(processId, callback) {
+            var _this5 = this;
+
+            antd.Modal.confirm({
+              title: '不可恢复',
+              content: '确定要删除该流程么？',
+              onOk: function onOk() {
+                axios.delete('task/' + _this5.props.id + '/process/' + processId).then(function (r) {
+                  _this5.fetchProcesses();
+                  if (callback) {
+                    callback();
+                  }
+                });
+              }
+            });
+          }
+        }, {
+          key: 'showEditor',
+          value: function showEditor(process) {
+            var _this6 = this;
+
+            var closeEditor = function closeEditor() {
+              _this6.setState({ modal: {} });
+            };
+            var modal = {};
+            if (process) {
+              modal = {
+                title: '编辑 #' + process.id,
+                visible: true,
+                footer: [React.createElement(
+                  Button,
+                  {
+                    onClick: function onClick() {
+                      return closeEditor();
+                    }
+                  },
+                  '\u53D6\u6D88'
+                ), React.createElement(
+                  Button,
+                  {
+                    type: 'danger',
+                    onClick: function onClick() {
+                      return _this6.deleteTaskProcess(process.id, closeEditor);
+                    }
+                  },
+                  '\u5220\u9664'
+                ), React.createElement(
+                  Button,
+                  {
+                    type: 'primary',
+                    onClick: function onClick() {
+                      _this6.updateTaskProcess(process.id).then(function (r) {
+                        closeEditor();
+                      });
+                    }
+                  },
+                  '\u4FDD\u5B58'
+                )],
+                onCancel: function onCancel(e) {
+                  return closeEditor();
+                },
+                destroyOnClose: true
+              };
+              this.setState({
+                modal: modal,
+                processTitle: process.title,
+                processDescription: process.description
+              });
+            } else {
+              modal = {
+                title: '新建流程',
+                visible: true,
+                okText: '确认创建',
+                onOk: function onOk(e) {
+                  _this6.createTaskProcess().then(function (r) {
+                    closeEditor();
+                  });
+                },
+                onCancel: function onCancel(e) {
+                  return closeEditor();
+                },
+                destroyOnClose: true
+              };
+              this.setState({
+                modal: modal,
+                processTitle: '',
+                processDescription: ''
+              });
+            }
+          }
+        }, {
+          key: 'render',
           value: function render() {
-            return React.createElement(
+            var _this7 = this;
+
+            var TaskProcessCreateButton = React.createElement(
+              Button,
+              {
+                type: 'primary',
+                size: 'small',
+                onClick: this.showEditor.bind(this, null)
+              },
+              React.createElement(Icon, { type: 'plus' }),
+              React.createElement(
+                'span',
+                null,
+                '\u6DFB\u52A0\u65B0\u6D41\u7A0B'
+              )
+            );
+            return [React.createElement(
               Card,
               {
                 style: { marginBottom: 16 },
-                title: "\u8FDB\u5EA6\u4FE1\u606F"
+                title: '\u4EFB\u52A1\u6D41\u7A0B',
+                extra: TaskProcessCreateButton
               },
               React.createElement(
                 Timeline,
                 null,
-                React.createElement(
-                  Timeline.Item,
-                  { color: "red" },
-                  React.createElement(
-                    "strong",
+                this.state.processes.map(function (o) {
+                  return React.createElement(
+                    Timeline.Item,
                     null,
-                    "MISSION"
-                  ),
-                  React.createElement(
-                    "div",
-                    null,
-                    "Create a services site 2015-09-01"
-                  )
-                ),
-                React.createElement(
-                  Timeline.Item,
-                  null,
-                  "Solve initial network problems 2015-09-01"
-                ),
-                React.createElement(
-                  Timeline.Item,
-                  null,
-                  "Technical testing 2015-09-01"
-                ),
-                React.createElement(
-                  Timeline.Item,
-                  null,
-                  "Network problems being solved 2015-09-01"
-                )
+                    React.createElement(
+                      'a',
+                      { onClick: _this7.showEditor.bind(_this7, o) },
+                      React.createElement(
+                        'strong',
+                        null,
+                        o.title
+                      )
+                    ),
+                    React.createElement(
+                      'div',
+                      { style: { color: '#757575' } },
+                      o.description
+                    )
+                  );
+                })
               )
-            );
+            ), React.createElement(
+              Modal,
+              this.state.modal,
+              React.createElement(
+                'div',
+                { style: { marginBottom: 16 } },
+                React.createElement(
+                  'strong',
+                  null,
+                  '\u4EFB\u52A1\u540D\u79F0'
+                ),
+                React.createElement(Input, {
+                  value: this.state.processTitle,
+                  onChange: function onChange(e) {
+                    return _this7.setState({ processTitle: e.target.value });
+                  }
+                })
+              ),
+              React.createElement(
+                'div',
+                { style: { marginBottom: 16 } },
+                React.createElement(
+                  'strong',
+                  null,
+                  '\u4EFB\u52A1\u63CF\u8FF0'
+                ),
+                React.createElement(Input.TextArea, {
+                  autosize: { minRows: 6, maxRows: 6 },
+                  value: this.state.processDescription,
+                  onChange: function onChange(e) {
+                    return _this7.setState({ processDescription: e.target.value });
+                  }
+                })
+              )
+            )];
           }
         }]);
 
         return _class;
       }(React.Component);
 
-      _export("default", _class);
+      _export('default', _class);
     }
   };
 });

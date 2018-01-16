@@ -35,14 +35,14 @@ class TaskProcess extends AbstractModel
      *
      * @Column(type="string", length=50)
      */
-    protected $name;
+    protected $title;
 
     /**
      * @var string
      *
-     * @Column(type="text")
+     * @Column(type="text", nullable=TRUE)
      */
-    protected $introduction;
+    protected $description;
 
     // ----------------------------------------
     // | GETTERS & SETTERS
@@ -70,46 +70,46 @@ class TaskProcess extends AbstractModel
     }
 
     /**
-     * getter of $name
+     * getter of $title
      *
      * @return string
      */
-    public function getName()
+    public function getTitle()
     {
-        return $this->name;
+        return $this->title;
     }
 
     /**
-     * setter of $name
+     * setter of $title
      *
-     * @param string $name
+     * @param string $title
      * @return $this
      */
-    public function name($name)
+    public function title($title)
     {
-        $this->name = $name;
+        $this->title = $title;
         return $this;
     }
 
     /**
-     * getter of $introduction
+     * getter of $description
      *
      * @return string
      */
-    public function getIntroduction()
+    public function getDescription()
     {
-        return $this->introduction;
+        return $this->description;
     }
 
     /**
-     * setter of $introduction
+     * setter of $description
      *
-     * @param string $introduction
+     * @param string $description
      * @return $this
      */
-    public function introduction($introduction)
+    public function description($description)
     {
-        $this->introduction = $introduction;
+        $this->description = $description;
         return $this;
     }
 

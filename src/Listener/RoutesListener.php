@@ -12,6 +12,10 @@
 namespace TeamELF\Ext\Task\Listener;
 
 use TeamELF\Event\RoutesWillBeLoaded;
+use TeamELF\Ext\Task\Api\ProcessCreateController;
+use TeamELF\Ext\Task\Api\ProcessDeleteController;
+use TeamELF\Ext\Task\Api\ProcessListController;
+use TeamELF\Ext\Task\Api\ProcessUpdateController;
 use TeamELF\Ext\Task\Api\TaskCreateController;
 use TeamELF\Ext\Task\Api\TaskItemController;
 use TeamELF\Ext\Task\Api\TaskListController;
@@ -36,10 +40,10 @@ class RoutesListener
             ->post('task-publish', '/{taskId}', TaskPublishController::class)
 
             ->prefix('/api/task/{taskId}/process')
-            ->get('task-process-view', '')
-            ->post('task-process-create', '')
-            ->put('task-process-update', '/{processId}')
-            ->delete('task-process-delete', '/{processId}')
+            ->get('task-process-list', '', ProcessListController::class)
+            ->post('task-process-create', '', ProcessCreateController::class)
+            ->put('task-process-update', '/{processId}', ProcessUpdateController::class)
+            ->delete('task-process-delete', '/{processId}', ProcessDeleteController::class)
 
             ->prefix('/api/task/{taskId}/assignee')
             ->get('task-assignee-view', '')
