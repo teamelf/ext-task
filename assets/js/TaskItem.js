@@ -9,6 +9,6 @@
 
 export default class extends React.Component {
   render () {
-    return 'task';
+    return <div>item</div>;
   }
 }

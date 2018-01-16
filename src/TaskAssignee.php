@@ -39,6 +39,14 @@ class TaskAssignee extends AbstractModel
      */
     protected $assignee;
 
+    /**
+     * @var boolean
+     *
+     * @Column(type="boolean", options={"default":TRUE})
+     */
+    protected $admin = true;
+
+
     // ----------------------------------------
     // | GETTERS & SETTERS
 
@@ -78,10 +86,34 @@ class TaskAssignee extends AbstractModel
      * setter of $assignee
      *
      * @param Member $assignee
+     * @return $this
      */
     public function assignee(Member $assignee)
     {
         $this->assignee = $assignee;
+        return $this;
+    }
+
+    /**
+     * getter of $admin
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return $this->admin;
+    }
+
+    /**
+     * setter of $admin
+     *
+     * @param bool $admin
+     * @return $this
+     */
+    public function admin(bool $admin)
+    {
+        $this->admin = $admin;
+        return $this;
     }
 
     // ----------------------------------------

@@ -42,16 +42,23 @@ class TaskReport extends AbstractModel
     /**
      * @var string
      *
-     * @Column(type="string", length=50)
+     * @Column(type="text")
      */
-    protected $title;
+    protected $summary;
 
     /**
      * @var string
      *
      * @Column(type="text")
      */
-    protected $content;
+    protected $plan;
+
+    /**
+     * @var string
+     *
+     * @Column(type="text")
+     */
+    protected $risk;
 
     // ----------------------------------------
     // | GETTERS & SETTERS
@@ -99,46 +106,68 @@ class TaskReport extends AbstractModel
     }
 
     /**
-     * getter of $title
+     * getter of $summary
      *
      * @return string
      */
-    public function getTitle()
+    public function getSummary()
     {
-        return $this->title;
+        return $this->summary;
     }
 
     /**
-     * setter of $title
+     * setter of $summary
      *
-     * @param string $title
+     * @param string $summary
      * @return $this
      */
-    public function title($title)
+    public function summary($summary)
     {
-        $this->title = $title;
+        $this->summary = $summary;
         return $this;
     }
 
     /**
-     * getter of $content
+     * getter of $plan
      *
      * @return string
      */
-    public function getContent()
+    public function getPlan()
     {
-        return $this->content;
+        return $this->plan;
     }
 
     /**
-     * setter of $content
+     * setter of $plan
      *
-     * @param string $content
+     * @param string $plan
      * @return $this
      */
-    public function content($content)
+    public function plan($plan)
     {
-        $this->content = $content;
+        $this->plan = $plan;
+        return $this;
+    }
+
+    /**
+     * getter of $risk
+     *
+     * @return string
+     */
+    public function getRisk()
+    {
+        return $this->risk;
+    }
+
+    /**
+     * setter of $risk
+     *
+     * @param string $risk
+     * @return $this
+     */
+    public function risk($risk)
+    {
+        $this->risk = $risk;
         return $this;
     }
 

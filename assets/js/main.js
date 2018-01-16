@@ -8,20 +8,22 @@
  */
 
 import extend from 'teamelf/common/extend';
-import Task from 'teamelf/mailer/Task';
 import App from 'teamelf/App';
 import { SideNav } from 'teamelf/layout/SideNav';
 import Permission from 'teamelf/Permission';
+import TaskList from 'teamelf/task/TaskList';
+import TaskItem from 'teamelf/task/TaskItem';
 
 extend(App.prototype, 'routes', routes => {
-  routes.push(...[
-    {path: '/task', component: Task}
-  ]);
+  routes.push(
+    {path: '/task', exact: true, component: TaskList},
+    {path: '/task/:id', exact: true, component: TaskItem},
+  );
 });
 
 extend(SideNav.prototype, 'navigations', navigations => {
   if (can('task.*')) {
-    navigations.push({path: '/task', icon: 'mail', title: '任务进度'});
+    navigations.push({path: '/task', icon: 'check-circle-o', title: '任务进度'});
   }
 });
 
@@ -29,10 +31,11 @@ extend(Permission.prototype, 'permissions', permissions => {
   permissions.push({
     name: '任务进度',
     children: [
-      {name: '查看发信邮箱列表', permission: 'mailer.list'},
-      {name: '创新发信邮箱', permission: 'mailer.create'},
-      {name: '更新发信邮箱', permission: 'mailer.update'},
-      {name: '删除发信邮箱', permission: 'mailer.delete'}
+      {name: '查看所有任务列表', permission: 'task.list'},
+      {name: '查看任务详情', permission: 'task.item'},
+      {name: '创新新任务', permission: 'task.create'},
+      {name: '更新任务', permission: 'task.update'},
+      {name: '删除未发布的任务', permission: 'task.delete'}
     ]
   });
 });
