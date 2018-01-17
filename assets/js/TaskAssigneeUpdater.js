@@ -7,15 +7,15 @@
  * file that was distributed with this source code.
  */
 
-const { Card, Input, List, Icon, Avatar } = antd;
+const { Card, List, Icon, Avatar } = antd;
+import MemberSearcher from 'teamelf/member/MemberSearcher';
 
 export default class extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
       members: [],
-      assignees: [],
-      username: ''
+      assignees: []
     };
     this.fetchMembers();
     this.fetchAssignees();
@@ -33,11 +33,8 @@ export default class extends React.Component {
       this.setState({assignees: r.data});
     });
   }
-  createAssignee () {
-    const data = {
-      username: this.state.username
-    };
-    axios.post(`task/${this.props.id}/assignee`, data).then(r => {
+  createAssignee (username) {
+    axios.post(`task/${this.props.id}/assignee`, {username}).then(r => {
       this.setState({username: ''});
       this.fetchAssignees();
     });
@@ -48,18 +45,11 @@ export default class extends React.Component {
     });
   }
   render () {
-    const SearchAssignee = (
-      <Input
-        value={this.state.username}
-        onChange={e => this.setState({username: e.target.value})}
-        onPressEnter={this.createAssignee.bind(this)}
-      />
-    );
     return (
       <Card
         style={{marginBottom: 16}}
         title="指派任务给"
-        extra={SearchAssignee}
+        extra={<MemberSearcher onSelect={this.createAssignee.bind(this)}/>}
       >
         <List
           itemLayout="horizontal"

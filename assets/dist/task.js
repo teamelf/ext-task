@@ -1,9 +1,9 @@
 'use strict';
 
-System.register('teamelf/task/TaskAssigneeUpdater', [], function (_export, _context) {
+System.register('teamelf/task/TaskAssigneeUpdater', ['teamelf/member/MemberSearcher'], function (_export, _context) {
   "use strict";
 
-  var _createClass, _antd, Card, Input, List, Icon, Avatar, _class;
+  var MemberSearcher, _createClass, _antd, Card, List, Icon, Avatar, _class;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -36,7 +36,9 @@ System.register('teamelf/task/TaskAssigneeUpdater', [], function (_export, _cont
   }
 
   return {
-    setters: [],
+    setters: [function (_teamelfMemberMemberSearcher) {
+      MemberSearcher = _teamelfMemberMemberSearcher.default;
+    }],
     execute: function () {
       _createClass = function () {
         function defineProperties(target, props) {
@@ -58,7 +60,6 @@ System.register('teamelf/task/TaskAssigneeUpdater', [], function (_export, _cont
 
       _antd = antd;
       Card = _antd.Card;
-      Input = _antd.Input;
       List = _antd.List;
       Icon = _antd.Icon;
       Avatar = _antd.Avatar;
@@ -73,8 +74,7 @@ System.register('teamelf/task/TaskAssigneeUpdater', [], function (_export, _cont
 
           _this.state = {
             members: [],
-            assignees: [],
-            username: ''
+            assignees: []
           };
           _this.fetchMembers();
           _this.fetchAssignees();
@@ -106,13 +106,10 @@ System.register('teamelf/task/TaskAssigneeUpdater', [], function (_export, _cont
           }
         }, {
           key: 'createAssignee',
-          value: function createAssignee() {
+          value: function createAssignee(username) {
             var _this4 = this;
 
-            var data = {
-              username: this.state.username
-            };
-            axios.post('task/' + this.props.id + '/assignee', data).then(function (r) {
+            axios.post('task/' + this.props.id + '/assignee', { username: username }).then(function (r) {
               _this4.setState({ username: '' });
               _this4.fetchAssignees();
             });
@@ -131,19 +128,12 @@ System.register('teamelf/task/TaskAssigneeUpdater', [], function (_export, _cont
           value: function render() {
             var _this6 = this;
 
-            var SearchAssignee = React.createElement(Input, {
-              value: this.state.username,
-              onChange: function onChange(e) {
-                return _this6.setState({ username: e.target.value });
-              },
-              onPressEnter: this.createAssignee.bind(this)
-            });
             return React.createElement(
               Card,
               {
                 style: { marginBottom: 16 },
                 title: '\u6307\u6D3E\u4EFB\u52A1\u7ED9',
-                extra: SearchAssignee
+                extra: React.createElement(MemberSearcher, { onSelect: this.createAssignee.bind(this) })
               },
               React.createElement(List, {
                 itemLayout: 'horizontal',
