@@ -14,19 +14,9 @@ export default class extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      members: [],
       assignees: []
     };
-    this.fetchMembers();
     this.fetchAssignees();
-  }
-  fetchMembers () {
-    axios.get('member').then(r => {
-      this.setState({members: r.data.map(o => ({
-        key: o.username,
-        value: o.name
-      }))});
-    });
   }
   fetchAssignees () {
     axios.get(`task/${this.props.id}/assignee`).then(r => {
