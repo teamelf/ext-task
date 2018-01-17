@@ -8,8 +8,7 @@
  */
 
 import Page from 'teamelf/layout/Page';
-const { Row, Col, Radio } = antd;
-import TaskStatus from 'teamelf/task/TaskStatus';
+const { Row, Col, Radio, Button } = antd;
 import TaskUpdater from 'teamelf/task/TaskUpdater';
 import TaskProcessUpdater from 'teamelf/task/TaskProcessUpdater';
 import TaskAssigneeUpdater from 'teamelf/task/TaskAssigneeUpdater';
@@ -19,14 +18,48 @@ export default class extends Page {
     super(props);
     const query = new URLSearchParams(window.location.search);
     this.mode = query.get('mode') || 'team';
+    this.taskId = this.props.match.params.id;
     this.state = {
       task: null
     };
     this.fetchTask();
   }
   fetchTask () {
-    axios.get('task/' + this.props.match.params.id).then(r => {
+    axios.get('task/' + this.taskId).then(r => {
       this.setState({task: r.data});
+    });
+  }
+  publishTask () {
+    antd.Modal.confirm({
+      title: '不可撤销',
+      content: [
+        <div>确定要发布任务么？发布后，您将</div>,
+        <ul>
+          <li>可以继续添加新的任务流程</li>
+          <li>可以指派任务给新成员</li>
+          <li><strong>不可</strong>更改任务信息（名称、描述）</li>
+          <li><strong>不可</strong>删除该任务</li>
+          <li><strong>不可</strong>更改已有提交报告关联的流程信息</li>
+          <li><strong>不可</strong>删除已有提交报告关联的流程</li>
+          <li><strong>不可</strong>删除已提交报告的成员</li>
+        </ul>
+      ],
+      onOk: () => {
+        axios.post('task/' + this.taskId).then(r => {
+          window.location.href = '/task/' + this.taskId + '?mode=team';
+        });
+      }
+    });
+  }
+  deleteTask () {
+    antd.Modal.confirm({
+      title: '不可恢复',
+      content: '确定要删除该任务么？',
+      onOk: () => {
+        axios.delete('task/' + this.taskId).then(r => {
+          window.location.href = '/task';
+        });
+      }
     });
   }
   title () {
@@ -67,6 +100,24 @@ export default class extends Page {
                 {otherViewer}
               </Radio.Group>
             </div>
+            <Row type="flex" gutter={16} style={{marginBottom: 16}}>
+              {this.state.task && this.state.task.draft && (
+                <Col>
+                  <Button
+                    type="primary"
+                    onClick={this.publishTask.bind(this)}
+                  >发布任务</Button>
+                </Col>
+              )}
+              {this.state.task && this.state.task.draft && (
+                <Col>
+                  <Button
+                    type="danger"
+                    onClick={this.deleteTask.bind(this)}
+                  >删除</Button>
+                </Col>
+              )}
+            </Row>
           </Col>
         </Row>
       );

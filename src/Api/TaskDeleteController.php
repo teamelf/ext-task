@@ -12,14 +12,15 @@
 namespace TeamELF\Ext\Task\Api;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use TeamELF\Exception\HttpForbiddenException;
 use TeamELF\Ext\Task\Task;
+use TeamELF\Ext\Task\TaskAssignee;
 use TeamELF\Ext\Task\TaskProcess;
-use TeamELF\Ext\Task\TaskReportMention;
 use TeamELF\Http\AbstractController;
 
-class ProcessUpdateController extends AbstractController
+class TaskDeleteController extends AbstractController
 {
     protected $needPermissions = ['task.update'];
 
@@ -31,21 +32,11 @@ class ProcessUpdateController extends AbstractController
      */
     public function handler(): Response
     {
-        $data = $this->validate([
-            'title' => [
-                new NotBlank()
-            ],
-            'description' => []
-        ]);
         $task = Task::find($this->getParameter('taskId'));
-        $process = TaskProcess::find($this->getParameter('processId'));
-        if (!$task || !$process || $process->getTask()->getId() !== $task->getId()) {
+        if (!$task || !$task->isDraft()) {
             throw new HttpForbiddenException();
         }
-        if (!$task->isDraft() && TaskReportMention::count(['process' => $process])) {
-            throw new HttpForbiddenException('');
-        }
-        $process->update($data);
+        $task->delete();
         return response();
     }
 }

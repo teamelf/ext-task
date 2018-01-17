@@ -255,7 +255,7 @@ System.register('teamelf/task/TaskCardItem', [], function (_export, _context) {
                 extra: moment.unix(this.props.createdAt).format('YYYY-MM-DD'),
                 hoverable: true,
                 onClick: function onClick(e) {
-                  return window.location.href = '/task/' + _this2.props.id;
+                  return window.location.href = '/task/' + _this2.props.id + '?mode=' + (_this2.props.draft ? 'edit' : 'team');
                 }
               },
               React.createElement(
@@ -281,10 +281,10 @@ System.register('teamelf/task/TaskCardItem', [], function (_export, _context) {
 });
 'use strict';
 
-System.register('teamelf/task/TaskItem', ['teamelf/layout/Page', 'teamelf/task/TaskStatus', 'teamelf/task/TaskUpdater', 'teamelf/task/TaskProcessUpdater', 'teamelf/task/TaskAssigneeUpdater'], function (_export, _context) {
+System.register('teamelf/task/TaskItem', ['teamelf/layout/Page', 'teamelf/task/TaskUpdater', 'teamelf/task/TaskProcessUpdater', 'teamelf/task/TaskAssigneeUpdater'], function (_export, _context) {
   "use strict";
 
-  var Page, TaskStatus, TaskUpdater, TaskProcessUpdater, TaskAssigneeUpdater, _extends, _createClass, _antd, Row, Col, Radio, _class;
+  var Page, TaskUpdater, TaskProcessUpdater, TaskAssigneeUpdater, _extends, _createClass, _antd, Row, Col, Radio, Button, _class;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -319,8 +319,6 @@ System.register('teamelf/task/TaskItem', ['teamelf/layout/Page', 'teamelf/task/T
   return {
     setters: [function (_teamelfLayoutPage) {
       Page = _teamelfLayoutPage.default;
-    }, function (_teamelfTaskTaskStatus) {
-      TaskStatus = _teamelfTaskTaskStatus.default;
     }, function (_teamelfTaskTaskUpdater) {
       TaskUpdater = _teamelfTaskTaskUpdater.default;
     }, function (_teamelfTaskTaskProcessUpdater) {
@@ -365,6 +363,7 @@ System.register('teamelf/task/TaskItem', ['teamelf/layout/Page', 'teamelf/task/T
       Row = _antd.Row;
       Col = _antd.Col;
       Radio = _antd.Radio;
+      Button = _antd.Button;
 
       _class = function (_Page) {
         _inherits(_class, _Page);
@@ -376,6 +375,7 @@ System.register('teamelf/task/TaskItem', ['teamelf/layout/Page', 'teamelf/task/T
 
           var query = new URLSearchParams(window.location.search);
           _this.mode = query.get('mode') || 'team';
+          _this.taskId = _this.props.match.params.id;
           _this.state = {
             task: null
           };
@@ -388,8 +388,105 @@ System.register('teamelf/task/TaskItem', ['teamelf/layout/Page', 'teamelf/task/T
           value: function fetchTask() {
             var _this2 = this;
 
-            axios.get('task/' + this.props.match.params.id).then(function (r) {
+            axios.get('task/' + this.taskId).then(function (r) {
               _this2.setState({ task: r.data });
+            });
+          }
+        }, {
+          key: 'publishTask',
+          value: function publishTask() {
+            var _this3 = this;
+
+            antd.Modal.confirm({
+              title: '不可撤销',
+              content: [React.createElement(
+                'div',
+                null,
+                '\u786E\u5B9A\u8981\u53D1\u5E03\u4EFB\u52A1\u4E48\uFF1F\u53D1\u5E03\u540E\uFF0C\u60A8\u5C06'
+              ), React.createElement(
+                'ul',
+                null,
+                React.createElement(
+                  'li',
+                  null,
+                  '\u53EF\u4EE5\u7EE7\u7EED\u6DFB\u52A0\u65B0\u7684\u4EFB\u52A1\u6D41\u7A0B'
+                ),
+                React.createElement(
+                  'li',
+                  null,
+                  '\u53EF\u4EE5\u6307\u6D3E\u4EFB\u52A1\u7ED9\u65B0\u6210\u5458'
+                ),
+                React.createElement(
+                  'li',
+                  null,
+                  React.createElement(
+                    'strong',
+                    null,
+                    '\u4E0D\u53EF'
+                  ),
+                  '\u66F4\u6539\u4EFB\u52A1\u4FE1\u606F\uFF08\u540D\u79F0\u3001\u63CF\u8FF0\uFF09'
+                ),
+                React.createElement(
+                  'li',
+                  null,
+                  React.createElement(
+                    'strong',
+                    null,
+                    '\u4E0D\u53EF'
+                  ),
+                  '\u5220\u9664\u8BE5\u4EFB\u52A1'
+                ),
+                React.createElement(
+                  'li',
+                  null,
+                  React.createElement(
+                    'strong',
+                    null,
+                    '\u4E0D\u53EF'
+                  ),
+                  '\u66F4\u6539\u5DF2\u6709\u63D0\u4EA4\u62A5\u544A\u5173\u8054\u7684\u6D41\u7A0B\u4FE1\u606F'
+                ),
+                React.createElement(
+                  'li',
+                  null,
+                  React.createElement(
+                    'strong',
+                    null,
+                    '\u4E0D\u53EF'
+                  ),
+                  '\u5220\u9664\u5DF2\u6709\u63D0\u4EA4\u62A5\u544A\u5173\u8054\u7684\u6D41\u7A0B'
+                ),
+                React.createElement(
+                  'li',
+                  null,
+                  React.createElement(
+                    'strong',
+                    null,
+                    '\u4E0D\u53EF'
+                  ),
+                  '\u5220\u9664\u5DF2\u63D0\u4EA4\u62A5\u544A\u7684\u6210\u5458'
+                )
+              )],
+              onOk: function onOk() {
+                axios.post('task/' + _this3.taskId).then(function (r) {
+                  window.location.href = '/task/' + _this3.taskId + '?mode=team';
+                });
+              }
+            });
+          }
+        }, {
+          key: 'deleteTask',
+          value: function deleteTask() {
+            var _this4 = this;
+
+            antd.Modal.confirm({
+              title: '不可恢复',
+              content: '确定要删除该任务么？',
+              onOk: function onOk() {
+                axios.delete('task/' + _this4.taskId).then(function (r) {
+                  window.location.href = '/task';
+                });
+              }
             });
           }
         }, {
@@ -480,6 +577,34 @@ System.register('teamelf/task/TaskItem', ['teamelf/layout/Page', 'teamelf/task/T
                         '\u6211\u7684\u89C6\u89D2'
                       ),
                       otherViewer
+                    )
+                  ),
+                  React.createElement(
+                    Row,
+                    { type: 'flex', gutter: 16, style: { marginBottom: 16 } },
+                    this.state.task && this.state.task.draft && React.createElement(
+                      Col,
+                      null,
+                      React.createElement(
+                        Button,
+                        {
+                          type: 'primary',
+                          onClick: this.publishTask.bind(this)
+                        },
+                        '\u53D1\u5E03\u4EFB\u52A1'
+                      )
+                    ),
+                    this.state.task && this.state.task.draft && React.createElement(
+                      Col,
+                      null,
+                      React.createElement(
+                        Button,
+                        {
+                          type: 'danger',
+                          onClick: this.deleteTask.bind(this)
+                        },
+                        '\u5220\u9664'
+                      )
                     )
                   )
                 )
@@ -920,7 +1045,7 @@ System.register('teamelf/task/TaskProcessUpdater', [], function (_export, _conte
               Card,
               {
                 style: { marginBottom: 16 },
-                title: '\u4EFB\u52A1\u6D41\u7A0B',
+                title: '\u5B50\u4EFB\u52A1/\u6D41\u7A0B',
                 extra: TaskProcessCreateButton
               },
               React.createElement(
@@ -1167,6 +1292,135 @@ System.register('teamelf/task/main', ['teamelf/common/extend', 'teamelf/App', 't
           children: [{ name: '查看所有任务列表', permission: 'task.list' }, { name: '查看任务详情', permission: 'task.item' }, { name: '创新新任务', permission: 'task.create' }, { name: '更新任务', permission: 'task.update' }, { name: '发布任务', permission: 'task.publish' }, { name: '删除未发布的任务', permission: 'task.delete' }]
         });
       });
+    }
+  };
+});
+"use strict";
+
+System.register("teamelf/task/TaskProgressOverview", ["teamelf/components/InfoEditor"], function (_export, _context) {
+  "use strict";
+
+  var InfoEditor, _createClass, _antd, Card, _class;
+
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
+  }
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  function _possibleConstructorReturn(self, call) {
+    if (!self) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+
+    return call && (typeof call === "object" || typeof call === "function") ? call : self;
+  }
+
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }
+
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+  }
+
+  return {
+    setters: [function (_teamelfComponentsInfoEditor) {
+      InfoEditor = _teamelfComponentsInfoEditor.default;
+    }],
+    execute: function () {
+      _createClass = function () {
+        function defineProperties(target, props) {
+          for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ("value" in descriptor) descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+          }
+        }
+
+        return function (Constructor, protoProps, staticProps) {
+          if (protoProps) defineProperties(Constructor.prototype, protoProps);
+          if (staticProps) defineProperties(Constructor, staticProps);
+          return Constructor;
+        };
+      }();
+
+      _antd = antd;
+      Card = _antd.Card;
+
+      _class = function (_React$Component) {
+        _inherits(_class, _React$Component);
+
+        function _class() {
+          _classCallCheck(this, _class);
+
+          return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+        }
+
+        _createClass(_class, [{
+          key: "edit",
+          value: function edit(key, v) {
+            var _this2 = this;
+
+            var data = _defineProperty({}, key, v);
+            return axios.put("task/" + this.props.id, data).then(function (r) {
+              _this2.props.onEdit();
+              return r;
+            });
+          }
+        }, {
+          key: "render",
+          value: function render() {
+            return React.createElement(
+              Card,
+              {
+                style: { marginBottom: 16 },
+                title: "\u57FA\u672C\u4FE1\u606F"
+              },
+              React.createElement(InfoEditor, {
+                label: "\u4EFB\u52A1\u540D\u79F0",
+                value: this.props.name,
+                onEdit: this.edit.bind(this, 'name')
+              }),
+              React.createElement(InfoEditor, {
+                type: "textarea",
+                label: "\u4EFB\u52A1\u63CF\u8FF0",
+                value: this.props.introduction,
+                onEdit: this.edit.bind(this, 'introduction')
+              })
+            );
+          }
+        }]);
+
+        return _class;
+      }(React.Component);
+
+      _export("default", _class);
     }
   };
 });

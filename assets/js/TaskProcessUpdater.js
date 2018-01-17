@@ -127,7 +127,7 @@ export default class extends React.Component {
     return [
       <Card
         style={{marginBottom: 16}}
-        title="任务流程"
+        title="子任务/流程"
         extra={TaskProcessCreateButton}
       >
         <Timeline>

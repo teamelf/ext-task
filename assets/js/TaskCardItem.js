@@ -17,7 +17,7 @@ export default class extends React.Component {
         title={this.props.name}
         extra={moment.unix(this.props.createdAt).format('YYYY-MM-DD')}
         hoverable
-        onClick={e => window.location.href = '/task/' + this.props.id}
+        onClick={e => window.location.href = '/task/' + this.props.id + '?mode=' + (this.props.draft ? 'edit' : 'team')}
       >
         <small>任务简介</small>
         <div>{this.props.introduction}</div>
