@@ -128,12 +128,18 @@ System.register('teamelf/task/TaskAssigneeUpdater', ['teamelf/member/MemberSearc
           value: function render() {
             var _this6 = this;
 
+            var AssigneeSearcher = React.createElement(MemberSearcher, {
+              onSelect: this.createAssignee.bind(this),
+              exclude: this.state.assignees.map(function (o) {
+                return o.username;
+              })
+            });
             return React.createElement(
               Card,
               {
                 style: { marginBottom: 16 },
                 title: '\u6307\u6D3E\u4EFB\u52A1\u7ED9',
-                extra: React.createElement(MemberSearcher, { onSelect: this.createAssignee.bind(this) })
+                extra: AssigneeSearcher
               },
               React.createElement(List, {
                 itemLayout: 'horizontal',

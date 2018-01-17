@@ -45,11 +45,17 @@ export default class extends React.Component {
     });
   }
   render () {
+    const AssigneeSearcher = (
+      <MemberSearcher
+        onSelect={this.createAssignee.bind(this)}
+        exclude={this.state.assignees.map(o => o.username)}
+      />
+    );
     return (
       <Card
         style={{marginBottom: 16}}
         title="指派任务给"
-        extra={<MemberSearcher onSelect={this.createAssignee.bind(this)}/>}
+        extra={AssigneeSearcher}
       >
         <List
           itemLayout="horizontal"
