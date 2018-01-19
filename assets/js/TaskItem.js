@@ -12,6 +12,7 @@ const { Row, Col, Radio, Button } = antd;
 import TaskUpdater from 'teamelf/task/TaskUpdater';
 import TaskProcessUpdater from 'teamelf/task/TaskProcessUpdater';
 import TaskAssigneeUpdater from 'teamelf/task/TaskAssigneeUpdater';
+import TaskProgressOverview from 'teamelf/task/TaskProgressOverview';
 
 export default class extends Page {
   constructor (props) {
@@ -150,7 +151,7 @@ export default class extends Page {
         const username = this.mode.substr('member_'.length);
         return <div>{username} view</div>;
       } else { // this.mode === 'team' or others
-        return <div>team view</div>;
+        return <TaskProgressOverview {...this.state.task}/>
       }
     }
   }

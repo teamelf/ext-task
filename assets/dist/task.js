@@ -73,60 +73,44 @@ System.register('teamelf/task/TaskAssigneeUpdater', ['teamelf/member/MemberSearc
           var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this, props));
 
           _this.state = {
-            members: [],
             assignees: []
           };
-          _this.fetchMembers();
           _this.fetchAssignees();
           return _this;
         }
 
         _createClass(_class, [{
-          key: 'fetchMembers',
-          value: function fetchMembers() {
-            var _this2 = this;
-
-            axios.get('member').then(function (r) {
-              _this2.setState({ members: r.data.map(function (o) {
-                  return {
-                    key: o.username,
-                    value: o.name
-                  };
-                }) });
-            });
-          }
-        }, {
           key: 'fetchAssignees',
           value: function fetchAssignees() {
-            var _this3 = this;
+            var _this2 = this;
 
             axios.get('task/' + this.props.id + '/assignee').then(function (r) {
-              _this3.setState({ assignees: r.data });
+              _this2.setState({ assignees: r.data });
             });
           }
         }, {
           key: 'createAssignee',
           value: function createAssignee(username) {
-            var _this4 = this;
+            var _this3 = this;
 
             axios.post('task/' + this.props.id + '/assignee', { username: username }).then(function (r) {
-              _this4.setState({ username: '' });
-              _this4.fetchAssignees();
+              _this3.setState({ username: '' });
+              _this3.fetchAssignees();
             });
           }
         }, {
           key: 'deleteAssignee',
           value: function deleteAssignee(assigneeId) {
-            var _this5 = this;
+            var _this4 = this;
 
             axios.delete('task/' + this.props.id + '/assignee/' + assigneeId).then(function (r) {
-              _this5.fetchAssignees();
+              _this4.fetchAssignees();
             });
           }
         }, {
           key: 'render',
           value: function render() {
-            var _this6 = this;
+            var _this5 = this;
 
             var AssigneeSearcher = React.createElement(MemberSearcher, {
               onSelect: this.createAssignee.bind(this),
@@ -149,7 +133,7 @@ System.register('teamelf/task/TaskAssigneeUpdater', ['teamelf/member/MemberSearc
                     List.Item,
                     { actions: [React.createElement(
                         'a',
-                        { onClick: _this6.deleteAssignee.bind(_this6, o.id) },
+                        { onClick: _this5.deleteAssignee.bind(_this5, o.id) },
                         React.createElement(Icon, { type: 'close' })
                       )] },
                     React.createElement(List.Item.Meta, {
@@ -281,10 +265,10 @@ System.register('teamelf/task/TaskCardItem', [], function (_export, _context) {
 });
 'use strict';
 
-System.register('teamelf/task/TaskItem', ['teamelf/layout/Page', 'teamelf/task/TaskUpdater', 'teamelf/task/TaskProcessUpdater', 'teamelf/task/TaskAssigneeUpdater'], function (_export, _context) {
+System.register('teamelf/task/TaskItem', ['teamelf/layout/Page', 'teamelf/task/TaskUpdater', 'teamelf/task/TaskProcessUpdater', 'teamelf/task/TaskAssigneeUpdater', 'teamelf/task/TaskProgressOverview'], function (_export, _context) {
   "use strict";
 
-  var Page, TaskUpdater, TaskProcessUpdater, TaskAssigneeUpdater, _extends, _createClass, _antd, Row, Col, Radio, Button, _class;
+  var Page, TaskUpdater, TaskProcessUpdater, TaskAssigneeUpdater, TaskProgressOverview, _extends, _createClass, _antd, Row, Col, Radio, Button, _class;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -325,6 +309,8 @@ System.register('teamelf/task/TaskItem', ['teamelf/layout/Page', 'teamelf/task/T
       TaskProcessUpdater = _teamelfTaskTaskProcessUpdater.default;
     }, function (_teamelfTaskTaskAssigneeUpdater) {
       TaskAssigneeUpdater = _teamelfTaskTaskAssigneeUpdater.default;
+    }, function (_teamelfTaskTaskProgressOverview) {
+      TaskProgressOverview = _teamelfTaskTaskProgressOverview.default;
     }],
     execute: function () {
       _extends = Object.assign || function (target) {
@@ -647,11 +633,7 @@ System.register('teamelf/task/TaskItem', ['teamelf/layout/Page', 'teamelf/task/T
                 );
               } else {
                 // this.mode === 'team' or others
-                return React.createElement(
-                  'div',
-                  null,
-                  'team view'
-                );
+                return React.createElement(TaskProgressOverview, this.state.task);
               }
             }
           }
@@ -1119,6 +1101,229 @@ System.register('teamelf/task/TaskProcessUpdater', [], function (_export, _conte
 });
 "use strict";
 
+System.register("teamelf/task/TaskProgressOverview", [], function (_export, _context) {
+  "use strict";
+
+  var _createClass, _antd, Row, Col, Card, Progress, Avatar, Popover, List, _class;
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  function _possibleConstructorReturn(self, call) {
+    if (!self) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+
+    return call && (typeof call === "object" || typeof call === "function") ? call : self;
+  }
+
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }
+
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+  }
+
+  return {
+    setters: [],
+    execute: function () {
+      _createClass = function () {
+        function defineProperties(target, props) {
+          for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ("value" in descriptor) descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+          }
+        }
+
+        return function (Constructor, protoProps, staticProps) {
+          if (protoProps) defineProperties(Constructor.prototype, protoProps);
+          if (staticProps) defineProperties(Constructor, staticProps);
+          return Constructor;
+        };
+      }();
+
+      _antd = antd;
+      Row = _antd.Row;
+      Col = _antd.Col;
+      Card = _antd.Card;
+      Progress = _antd.Progress;
+      Avatar = _antd.Avatar;
+      Popover = _antd.Popover;
+      List = _antd.List;
+
+      _class = function (_React$Component) {
+        _inherits(_class, _React$Component);
+
+        function _class(props) {
+          _classCallCheck(this, _class);
+
+          var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this, props));
+
+          _this.state = {
+            assignees: [],
+            processes: []
+          };
+          _this.fetchAssignees();
+          _this.fetchProcesses();
+          return _this;
+        }
+
+        _createClass(_class, [{
+          key: "fetchAssignees",
+          value: function fetchAssignees() {
+            var _this2 = this;
+
+            axios.get("task/" + this.props.id + "/assignee").then(function (r) {
+              _this2.setState({ assignees: r.data });
+            });
+          }
+        }, {
+          key: "fetchProcesses",
+          value: function fetchProcesses() {
+            var _this3 = this;
+
+            return axios.get("task/" + this.props.id + "/process").then(function (r) {
+              _this3.setState({ processes: r.data });
+              return r;
+            });
+          }
+        }, {
+          key: "render",
+          value: function render() {
+            var _this4 = this;
+
+            return React.createElement(
+              Row,
+              { type: "flex", gutter: 16 },
+              React.createElement(
+                Col,
+                { xs: 24, md: 12 },
+                React.createElement(
+                  Card,
+                  {
+                    style: { marginBottom: 16 },
+                    className: "task-overview",
+                    title: this.props.name
+                  },
+                  React.createElement("div", { dangerouslySetInnerHTML: { __html: marked(this.props.introduction) } })
+                )
+              ),
+              React.createElement(
+                Col,
+                { xs: 24, md: 12 },
+                React.createElement(
+                  Card,
+                  {
+                    style: { marginBottom: 16 },
+                    className: "task-overview",
+                    title: React.createElement(Progress, { percent: 30 })
+                  },
+                  React.createElement(List, {
+                    itemLayout: "horizontal",
+                    dataSource: this.state.processes,
+                    renderItem: function renderItem(o) {
+                      return React.createElement(
+                        List.Item,
+                        null,
+                        React.createElement(List.Item.Meta, {
+                          avatar: React.createElement(Progress, {
+                            type: "circle",
+                            width: "70",
+                            percent: 70,
+                            format: function format(percent) {
+                              return percent + " Days";
+                            }
+                          }),
+                          title: o.title,
+                          description: o.description
+                        })
+                      );
+                    }
+                  })
+                )
+              ),
+              React.createElement(
+                Col,
+                { xs: 24 },
+                React.createElement(
+                  Card,
+                  {
+                    style: { marginBottom: 16 },
+                    title: "\u4E2A\u4EBA\u60C5\u51B5"
+                  },
+                  this.state.assignees.map(function (o) {
+                    return React.createElement(
+                      Card.Grid,
+                      { style: { width: '100%' } },
+                      React.createElement(
+                        Row,
+                        { type: "flex", gutter: 16 },
+                        React.createElement(
+                          Col,
+                          { xs: { span: 12, order: 1 }, md: { span: 4, order: 1 } },
+                          React.createElement(Avatar, { size: "small", style: { verticalAlign: 'middle' } }),
+                          React.createElement(
+                            "span",
+                            { style: { marginLeft: 16 } },
+                            o.name
+                          )
+                        ),
+                        React.createElement(
+                          Col,
+                          { xs: { span: 24, order: 3 }, md: { span: 16, order: 2 } },
+                          _this4.state.processes.map(function (o) {
+                            return React.createElement("div", {
+                              style: {
+                                display: 'inline-block',
+                                height: 24,
+                                width: 100.0 / _this4.state.processes.length + "%",
+                                border: '1px solid #dcdcdc'
+                              }
+                            });
+                          })
+                        ),
+                        React.createElement(
+                          Col,
+                          { xs: { span: 12, order: 2 }, md: { span: 4, order: 3 }, style: { textAlign: 'right' } },
+                          React.createElement(
+                            "a",
+                            { href: "?mode=member_" + o.username },
+                            "TA\u7684\u89C6\u89D2"
+                          )
+                        )
+                      )
+                    );
+                  })
+                )
+              )
+            );
+          }
+        }]);
+
+        return _class;
+      }(React.Component);
+
+      _export("default", _class);
+    }
+  };
+});
+"use strict";
+
 System.register("teamelf/task/TaskUpdater", ["teamelf/components/InfoEditor"], function (_export, _context) {
   "use strict";
 
@@ -1292,135 +1497,6 @@ System.register('teamelf/task/main', ['teamelf/common/extend', 'teamelf/App', 't
           children: [{ name: '查看所有任务列表', permission: 'task.list' }, { name: '查看任务详情', permission: 'task.item' }, { name: '创新新任务', permission: 'task.create' }, { name: '更新任务', permission: 'task.update' }, { name: '发布任务', permission: 'task.publish' }, { name: '删除未发布的任务', permission: 'task.delete' }]
         });
       });
-    }
-  };
-});
-"use strict";
-
-System.register("teamelf/task/TaskProgressOverview", ["teamelf/components/InfoEditor"], function (_export, _context) {
-  "use strict";
-
-  var InfoEditor, _createClass, _antd, Card, _class;
-
-  function _defineProperty(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, {
-        value: value,
-        enumerable: true,
-        configurable: true,
-        writable: true
-      });
-    } else {
-      obj[key] = value;
-    }
-
-    return obj;
-  }
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  function _possibleConstructorReturn(self, call) {
-    if (!self) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-
-    return call && (typeof call === "object" || typeof call === "function") ? call : self;
-  }
-
-  function _inherits(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-    }
-
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
-    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-  }
-
-  return {
-    setters: [function (_teamelfComponentsInfoEditor) {
-      InfoEditor = _teamelfComponentsInfoEditor.default;
-    }],
-    execute: function () {
-      _createClass = function () {
-        function defineProperties(target, props) {
-          for (var i = 0; i < props.length; i++) {
-            var descriptor = props[i];
-            descriptor.enumerable = descriptor.enumerable || false;
-            descriptor.configurable = true;
-            if ("value" in descriptor) descriptor.writable = true;
-            Object.defineProperty(target, descriptor.key, descriptor);
-          }
-        }
-
-        return function (Constructor, protoProps, staticProps) {
-          if (protoProps) defineProperties(Constructor.prototype, protoProps);
-          if (staticProps) defineProperties(Constructor, staticProps);
-          return Constructor;
-        };
-      }();
-
-      _antd = antd;
-      Card = _antd.Card;
-
-      _class = function (_React$Component) {
-        _inherits(_class, _React$Component);
-
-        function _class() {
-          _classCallCheck(this, _class);
-
-          return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
-        }
-
-        _createClass(_class, [{
-          key: "edit",
-          value: function edit(key, v) {
-            var _this2 = this;
-
-            var data = _defineProperty({}, key, v);
-            return axios.put("task/" + this.props.id, data).then(function (r) {
-              _this2.props.onEdit();
-              return r;
-            });
-          }
-        }, {
-          key: "render",
-          value: function render() {
-            return React.createElement(
-              Card,
-              {
-                style: { marginBottom: 16 },
-                title: "\u57FA\u672C\u4FE1\u606F"
-              },
-              React.createElement(InfoEditor, {
-                label: "\u4EFB\u52A1\u540D\u79F0",
-                value: this.props.name,
-                onEdit: this.edit.bind(this, 'name')
-              }),
-              React.createElement(InfoEditor, {
-                type: "textarea",
-                label: "\u4EFB\u52A1\u63CF\u8FF0",
-                value: this.props.introduction,
-                onEdit: this.edit.bind(this, 'introduction')
-              })
-            );
-          }
-        }]);
-
-        return _class;
-      }(React.Component);
-
-      _export("default", _class);
     }
   };
 });

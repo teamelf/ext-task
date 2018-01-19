@@ -1,0 +1,19 @@
+.task-process-shadow {
+  box-shadow: 1px 0 0 0 #e8e8e8, 0 1px 0 0 #e8e8e8, 1px 1px 0 0 #e8e8e8, inset 1px 0 0 0 #e8e8e8, inset 0 1px 0 0 #e8e8e8;
+  transition: box-shadow .3s;
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+.task-overview {
+  .ant-card-head {
+    .ant-progress {
+      margin: 5px 0;
+    }
+  }
+  .ant-card-head-title {}
+  .ant-card-body {
+    height: 500px;
+    overflow-y: auto;
+  }
+}
