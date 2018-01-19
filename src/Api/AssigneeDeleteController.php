@@ -23,7 +23,7 @@ use TeamELF\Http\AbstractController;
 
 class AssigneeDeleteController extends AbstractController
 {
-    protected $needPermissions = ['task.update'];
+    protected $needLogin = true;
 
     /**
      * handle the request
@@ -35,6 +35,9 @@ class AssigneeDeleteController extends AbstractController
     {
         $task = Task::find($this->getParameter('taskId'));
         $assignee = TaskAssignee::find($this->getParameter('assigneeId'));
+        if (!$assignee->can($this->getAuth(), 'delete')) {
+            throw new HttpForbiddenException();
+        }
         if (!$task || !$assignee || $assignee->getTask()->getId() !== $task->getId() || $assignee->isAdmin()) {
             throw new HttpForbiddenException();
         }

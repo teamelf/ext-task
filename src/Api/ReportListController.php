@@ -19,7 +19,7 @@ use TeamELF\Http\AbstractController;
 
 class ReportListController extends AbstractController
 {
-    protected $needPermissions = ['task.item'];
+    protected $needLogin = true;
 
     /**
      * handle the request
@@ -34,13 +34,15 @@ class ReportListController extends AbstractController
         }
         $response = [];
         foreach (TaskReport::where(['task' => $task]) as $report) {
-            $response[] = [
-                'id' => $report->getId(),
-                'createdAt' => $report->getCreatedAt() ? $report->getCreatedAt()->getTimestamp() : null,
-                'updatedAt' => $report->getUpdatedAt() ? $report->getUpdatedAt()->getTimestamp() : null,
-                'abstract' => $report->getAbstract(20),
-                'draft' => $report->isDraft()
-            ];
+            if ($report->can($this->getAuth(), 'item')) {
+                $response[] = [
+                    'id' => $report->getId(),
+                    'createdAt' => $report->getCreatedAt() ? $report->getCreatedAt()->getTimestamp() : null,
+                    'updatedAt' => $report->getUpdatedAt() ? $report->getUpdatedAt()->getTimestamp() : null,
+                    'abstract' => $report->getAbstract(20),
+                    'draft' => $report->isDraft()
+                ];
+            }
         }
         return response($response);
     }

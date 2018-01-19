@@ -118,4 +118,24 @@ class TaskAssignee extends AbstractModel
 
     // ----------------------------------------
     // | HELPER FUNCTIONS
+
+    /**
+     * special permission checking
+     *
+     * @param Member $member
+     * @param string $permission
+     * @return bool
+     */
+    public function can(Member $member, $permission)
+    {
+        switch ($permission) {
+            case 'create':
+            case 'delete':
+                if (TaskAssignee::count(['task' => $this->getTask(), 'assignee' => $member, 'admin' => true])) {
+                    return true;
+                }
+            default:
+                return $member->can('task.update');
+        }
+    }
 }

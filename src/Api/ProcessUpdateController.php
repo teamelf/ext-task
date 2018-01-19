@@ -21,7 +21,7 @@ use TeamELF\Http\AbstractController;
 
 class ProcessUpdateController extends AbstractController
 {
-    protected $needPermissions = ['task.update'];
+    protected $needLogin = true;
 
     /**
      * handle the request
@@ -39,6 +39,9 @@ class ProcessUpdateController extends AbstractController
         ]);
         $task = Task::find($this->getParameter('taskId'));
         $process = TaskProcess::find($this->getParameter('processId'));
+        if (!$process->can($this->getAuth(), 'update')) {
+            throw new HttpForbiddenException();
+        }
         if (!$task || !$process || $process->getTask()->getId() !== $task->getId()) {
             throw new HttpForbiddenException();
         }

@@ -11,6 +11,7 @@
 
 namespace TeamELF\Ext\Task;
 
+use TeamELF\Core\Member;
 use TeamELF\Database\AbstractModel;
 
 /**
@@ -115,4 +116,25 @@ class TaskProcess extends AbstractModel
 
     // ----------------------------------------
     // | HELPER FUNCTIONS
+
+    /**
+     * special permission checking
+     *
+     * @param Member $member
+     * @param string $permission
+     * @return bool
+     */
+    public function can(Member $member, $permission)
+    {
+        switch ($permission) {
+            case 'create':
+            case 'update':
+            case 'delete':
+                if (TaskAssignee::count(['task' => $this->getTask(), 'assignee' => $member, 'admin' => true])) {
+                    return true;
+                }
+            default:
+                return $member->can('task.update');
+        }
+    }
 }

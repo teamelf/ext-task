@@ -12,17 +12,13 @@
 namespace TeamELF\Ext\Task\Api;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Constraints\Choice;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use TeamELF\Exception\HttpForbiddenException;
 use TeamELF\Ext\Task\Task;
-use TeamELF\Ext\Task\TaskAssignee;
-use TeamELF\Ext\Task\TaskProcess;
 use TeamELF\Http\AbstractController;
 
 class TaskDeleteController extends AbstractController
 {
-    protected $needPermissions = ['task.update'];
+    protected $needLogin = true;
 
     /**
      * handle the request
@@ -34,6 +30,9 @@ class TaskDeleteController extends AbstractController
     {
         $task = Task::find($this->getParameter('taskId'));
         if (!$task || !$task->isDraft()) {
+            throw new HttpForbiddenException();
+        }
+        if (!$task->can($this->getAuth(), 'delete')) {
             throw new HttpForbiddenException();
         }
         $task->delete();

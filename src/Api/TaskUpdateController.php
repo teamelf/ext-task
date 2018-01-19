@@ -20,7 +20,7 @@ use TeamELF\Http\AbstractController;
 
 class TaskUpdateController extends AbstractController
 {
-    protected $needPermissions = ['task.update'];
+    protected $needLogin = true;
 
     /**
      * handle the request
@@ -35,6 +35,9 @@ class TaskUpdateController extends AbstractController
             'introduction' => []
         ]);
         $task = Task::find($this->getParameter('taskId'));
+        if (!$task->can($this->getAuth(), 'update')) {
+            throw new HttpForbiddenException();
+        }
         if (!$task || !$task->isDraft()) {
             throw new HttpForbiddenException();
         }

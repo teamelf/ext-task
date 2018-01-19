@@ -22,17 +22,14 @@ extend(App.prototype, 'routes', routes => {
 });
 
 extend(SideNav.prototype, 'navigations', navigations => {
-  if (can('task.*')) {
-    navigations.push({path: '/task', icon: 'check-circle-o', title: '任务进度'});
-  }
+  navigations.push({path: '/task', icon: 'check-circle-o', title: '任务进度'});
 });
 
 extend(Permission.prototype, 'permissions', permissions => {
   permissions.push({
     name: '任务进度',
     children: [
-      {name: '查看所有任务列表', permission: 'task.list'},
-      {name: '查看任务详情', permission: 'task.item'},
+      {name: '查看所有任务详情', permission: 'task.item'},
       {name: '创新新任务', permission: 'task.create'},
       {name: '更新任务', permission: 'task.update'},
       {name: '发布任务', permission: 'task.publish'},

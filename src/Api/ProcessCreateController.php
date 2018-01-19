@@ -20,7 +20,7 @@ use TeamELF\Http\AbstractController;
 
 class ProcessCreateController extends AbstractController
 {
-    protected $needPermissions = ['task.update'];
+    protected $needLogin = true;
 
     /**
      * handle the request
@@ -41,8 +41,11 @@ class ProcessCreateController extends AbstractController
             throw new HttpForbiddenException();
         }
         $process = (new TaskProcess($data))
-            ->task($task)
-            ->save();
+            ->task($task);
+        if (!$process->can($this->getAuth(), 'create')) {
+            throw new HttpForbiddenException();
+        }
+        $process->save();
         return response([
             'id' => $process->getId()
         ]);

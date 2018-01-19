@@ -20,7 +20,7 @@ use TeamELF\Http\AbstractController;
 
 class ProcessDeleteController extends AbstractController
 {
-    protected $needPermissions = ['task.update'];
+    protected $needLogin = true;
 
     /**
      * handle the request
@@ -32,6 +32,9 @@ class ProcessDeleteController extends AbstractController
     {
         $task = Task::find($this->getParameter('taskId'));
         $process = TaskProcess::find($this->getParameter('processId'));
+        if (!$process->can($this->getAuth(), 'delete')) {
+            throw new HttpForbiddenException();
+        }
         if (!$task || !$process || $process->getTask()->getId() !== $task->getId()) {
             throw new HttpForbiddenException();
         }

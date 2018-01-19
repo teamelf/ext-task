@@ -19,7 +19,7 @@ use TeamELF\Http\AbstractController;
 
 class ReportDeleteController extends AbstractController
 {
-    protected $needPermissions = ['task.update'];
+    protected $needLogin = true;
 
     /**
      * handle the request
@@ -31,6 +31,9 @@ class ReportDeleteController extends AbstractController
     {
         $task = Task::find($this->getParameter('taskId'));
         $report = TaskReport::find($this->getParameter('reportId'));
+        if (!$report->can($this->getAuth(), 'delete')) {
+            throw new HttpForbiddenException();
+        }
         if (!$task || !$report || $report->getTask()->getId() !== $task->getId()) {
             throw new HttpForbiddenException();
         }

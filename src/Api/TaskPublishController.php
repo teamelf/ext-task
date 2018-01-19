@@ -18,7 +18,7 @@ use TeamELF\Http\AbstractController;
 
 class TaskPublishController extends AbstractController
 {
-    protected $needPermissions = ['task.publish'];
+    protected $needLogin = true;
 
     /**
      * handle the request
@@ -29,6 +29,9 @@ class TaskPublishController extends AbstractController
     public function handler(): Response
     {
         $task = Task::find($this->getParameter('taskId'));
+        if (!$task->can($this->getAuth(), 'publish')) {
+            throw new HttpForbiddenException();
+        }
         if (!$task || !$task->isDraft()) {
             throw new HttpForbiddenException();
         }

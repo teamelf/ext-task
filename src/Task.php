@@ -11,6 +11,7 @@
 
 namespace TeamELF\Ext\Task;
 
+use TeamELF\Core\Member;
 use TeamELF\Database\AbstractModel;
 
 /**
@@ -191,6 +192,44 @@ class Task extends AbstractModel
             return mb_substr($introduction, 0, $length - 3) . '...';
         } else {
             return $introduction;
+        }
+    }
+
+    /**
+     * special permission checking
+     *
+     * @param Member $member
+     * @param string $permission
+     * @return bool
+     */
+    public function can(Member $member, $permission)
+    {
+        switch ($permission) {
+            case 'assignee.create':
+            case 'assignee.delete':
+            case 'process.create':
+            case 'process.delete':
+            case 'process.update':
+            case 'report.create':
+            case 'report.delete':
+            case 'report.item':
+            case 'report.list':
+            case 'report.submit':
+            case 'report.update':
+                //////
+            case 'item':
+                if (TaskAssignee::count(['task' => $this, 'assignee' => $member])) {
+                    return true;
+                }
+            case 'delete':
+            case 'publish':
+            case 'update':
+                if (TaskAssignee::count(['task' => $this, 'assignee' => $member, 'admin' => true])) {
+                    return true;
+                }
+            case 'create':
+            default:
+                return $member->can('task.' . $permission);
         }
     }
 }

@@ -17,7 +17,7 @@ use TeamELF\Http\AbstractController;
 
 class TaskListController extends AbstractController
 {
-    protected $needPermissions = ['task.list'];
+    protected $needLogin = true;
 
     /**
      * handle the request
@@ -28,14 +28,16 @@ class TaskListController extends AbstractController
     {
         $response = [];
         foreach (Task::all() as $task) {
-            $response[] = [
-                'id' => $task->getId(),
-                'createdAt' => $task->getCreatedAt() ? $task->getCreatedAt()->getTimestamp() : null,
-                'name' => $task->getName(),
-                'abstract' => $task->getAbstract(),
-                'teamwork' => $task->isTeamwork(),
-                'draft' => $task->isDraft()
-            ];
+            if ($task->can($this->getAuth(), 'item')) {
+                $response[] = [
+                    'id' => $task->getId(),
+                    'createdAt' => $task->getCreatedAt() ? $task->getCreatedAt()->getTimestamp() : null,
+                    'name' => $task->getName(),
+                    'abstract' => $task->getAbstract(),
+                    'teamwork' => $task->isTeamwork(),
+                    'draft' => $task->isDraft()
+                ];
+            }
         }
         return response($response);
     }

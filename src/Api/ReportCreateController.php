@@ -20,7 +20,7 @@ use TeamELF\Http\AbstractController;
 
 class ReportCreateController extends AbstractController
 {
-    protected $needPermissions = ['task.update'];
+    protected $needLogin = true;
 
     /**
      * handle the request
@@ -43,8 +43,11 @@ class ReportCreateController extends AbstractController
         }
         $report = (new TaskReport($data))
             ->task($task)
-            ->assignee($this->getAuth())
-            ->save();
+            ->assignee($this->getAuth());
+        if (!$report->can($this->getAuth(), 'create')) {
+            throw new HttpForbiddenException();
+        }
+        $report->save();
         return response([
             'id' => $report->getId()
         ]);

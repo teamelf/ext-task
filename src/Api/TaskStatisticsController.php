@@ -22,7 +22,7 @@ use TeamELF\Http\AbstractController;
 
 class TaskStatisticsController extends AbstractController
 {
-    protected $needPermissions = ['task.item'];
+    protected $needLogin = true;
 
     /**
      * handle the request
@@ -34,6 +34,9 @@ class TaskStatisticsController extends AbstractController
     {
         $task = Task::find($this->getParameter('taskId'));
         if (!$task) {
+            throw new HttpForbiddenException();
+        }
+        if (!$task->can($this->getAuth(), 'item')) {
             throw new HttpForbiddenException();
         }
         $doneProcess = 0;

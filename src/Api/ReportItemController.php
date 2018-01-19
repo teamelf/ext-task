@@ -19,7 +19,7 @@ use TeamELF\Http\AbstractController;
 
 class ReportItemController extends AbstractController
 {
-    protected $needPermissions = ['task.update'];
+    protected $needLogin = true;
 
     /**
      * handle the request
@@ -32,6 +32,9 @@ class ReportItemController extends AbstractController
         $task = Task::find($this->getParameter('taskId'));
         $report = TaskReport::find($this->getParameter('reportId'));
         if (!$task || !$report || $report->getTask()->getId() !== $task->getId()) {
+            throw new HttpForbiddenException();
+        }
+        if (!$report->can($this->getAuth(), 'item')) {
             throw new HttpForbiddenException();
         }
         return response([

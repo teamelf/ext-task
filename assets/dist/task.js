@@ -2098,15 +2098,13 @@ System.register('teamelf/task/main', ['teamelf/common/extend', 'teamelf/App', 't
       });
 
       extend(SideNav.prototype, 'navigations', function (navigations) {
-        if (can('task.*')) {
-          navigations.push({ path: '/task', icon: 'check-circle-o', title: '任务进度' });
-        }
+        navigations.push({ path: '/task', icon: 'check-circle-o', title: '任务进度' });
       });
 
       extend(Permission.prototype, 'permissions', function (permissions) {
         permissions.push({
           name: '任务进度',
-          children: [{ name: '查看所有任务列表', permission: 'task.list' }, { name: '查看任务详情', permission: 'task.item' }, { name: '创新新任务', permission: 'task.create' }, { name: '更新任务', permission: 'task.update' }, { name: '发布任务', permission: 'task.publish' }, { name: '删除未发布的任务', permission: 'task.delete' }]
+          children: [{ name: '查看所有任务详情', permission: 'task.item' }, { name: '创新新任务', permission: 'task.create' }, { name: '更新任务', permission: 'task.update' }, { name: '发布任务', permission: 'task.publish' }, { name: '删除未发布的任务', permission: 'task.delete' }]
         });
       });
     }

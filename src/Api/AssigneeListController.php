@@ -12,6 +12,7 @@
 namespace TeamELF\Ext\Task\Api;
 
 use Symfony\Component\HttpFoundation\Response;
+use TeamELF\Exception\HttpForbiddenException;
 use TeamELF\Exception\HttpNotFoundException;
 use TeamELF\Ext\Task\Task;
 use TeamELF\Ext\Task\TaskAssignee;
@@ -20,11 +21,13 @@ use TeamELF\Http\AbstractController;
 
 class AssigneeListController extends AbstractController
 {
-    protected $needPermissions = ['task.item'];
+    protected $needLogin = true;
 
     /**
      * handle the request
+     *
      * @return Response
+     * @throws HttpForbiddenException
      * @throws HttpNotFoundException
      */
     public function handler(): Response
@@ -32,6 +35,9 @@ class AssigneeListController extends AbstractController
         $task = Task::find($this->getParameter('taskId'));
         if (!$task) {
             throw new HttpNotFoundException();
+        }
+        if (!$task->can($this->getAuth(), 'item')) {
+            throw new HttpForbiddenException();
         }
         $response = [];
         foreach (TaskAssignee::where(['task' => $task], ['createdAt' => 'ASC']) as $assignee) {

@@ -220,4 +220,31 @@ class TaskReport extends AbstractModel
             return $introduction;
         }
     }
+
+    /**
+     * special permission checking
+     *
+     * @param Member $member
+     * @param string $permission
+     * @return bool
+     */
+    public function can(Member $member, $permission)
+    {
+        switch ($permission) {
+            case 'create':
+                if (TaskAssignee::count(['task' => $this->getTask(), 'assignee' => $member])) {
+                    return true;
+                }
+            case 'item':
+            case 'update':
+            case 'delete':
+            case 'submit':
+                if (TaskAssignee::count(['task' => $this->getTask(), 'assignee' => $member, 'admin' => true])
+                    || $this->getAssignee()->getId() === $member->getId()) {
+                    return true;
+                }
+            default:
+                return $member->can('task.update');
+        }
+    }
 }

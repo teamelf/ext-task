@@ -18,12 +18,11 @@ use TeamELF\Exception\HttpForbiddenException;
 use TeamELF\Exception\HttpNotFoundException;
 use TeamELF\Ext\Task\Task;
 use TeamELF\Ext\Task\TaskAssignee;
-use TeamELF\Ext\Task\TaskProcess;
 use TeamELF\Http\AbstractController;
 
 class AssigneeCreateController extends AbstractController
 {
-    protected $needPermissions = ['task.update'];
+    protected $needLogin = true;
 
     /**
      * handle the request
@@ -51,7 +50,11 @@ class AssigneeCreateController extends AbstractController
         if (TaskAssignee::where($attributes)) {
             throw new HttpForbiddenException();
         }
-        $assignee = (new TaskAssignee($attributes))->save();
+        $assignee = (new TaskAssignee($attributes));
+        if (!$assignee->can($this->getAuth(), 'create')) {
+            throw new HttpForbiddenException();
+        }
+        $assignee->save();
         return response([
             'id' => $assignee->getId()
         ]);
