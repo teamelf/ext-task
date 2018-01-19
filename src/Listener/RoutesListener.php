@@ -19,6 +19,12 @@ use TeamELF\Ext\Task\Api\ProcessCreateController;
 use TeamELF\Ext\Task\Api\ProcessDeleteController;
 use TeamELF\Ext\Task\Api\ProcessListController;
 use TeamELF\Ext\Task\Api\ProcessUpdateController;
+use TeamELF\Ext\Task\Api\ReportCreateController;
+use TeamELF\Ext\Task\Api\ReportDeleteController;
+use TeamELF\Ext\Task\Api\ReportItemController;
+use TeamELF\Ext\Task\Api\ReportListController;
+use TeamELF\Ext\Task\Api\ReportSubmitController;
+use TeamELF\Ext\Task\Api\ReportUpdateController;
 use TeamELF\Ext\Task\Api\TaskCreateController;
 use TeamELF\Ext\Task\Api\TaskDeleteController;
 use TeamELF\Ext\Task\Api\TaskItemController;
@@ -56,7 +62,11 @@ class RoutesListener
             ->delete('task-assignee-delete', '/{assigneeId}', AssigneeDeleteController::class)
 
             ->prefix('/api/task/{taskId}/report')
-            ->get('task-report-view', '')
-            ->post('task-report-create', '');
+            ->get('task-report-list', '', ReportListController::class)
+            ->post('task-report-create', '', ReportCreateController::class)
+            ->get('task-report-view', '/{reportId}', ReportItemController::class)
+            ->put('task-report-update', '/{reportId}', ReportUpdateController::class)
+            ->delete('task-report-delete', '/{reportId}', ReportDeleteController::class)
+            ->post('task-report-submit', '/{reportId}', ReportSubmitController::class);
     }
 }

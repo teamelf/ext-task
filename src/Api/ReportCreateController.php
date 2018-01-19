@@ -15,11 +15,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use TeamELF\Exception\HttpForbiddenException;
 use TeamELF\Ext\Task\Task;
-use TeamELF\Ext\Task\TaskProcess;
-use TeamELF\Ext\Task\TaskReportMention;
+use TeamELF\Ext\Task\TaskReport;
 use TeamELF\Http\AbstractController;
 
-class ProcessUpdateController extends AbstractController
+class ReportCreateController extends AbstractController
 {
     protected $needPermissions = ['task.update'];
 
@@ -32,20 +31,22 @@ class ProcessUpdateController extends AbstractController
     public function handler(): Response
     {
         $data = $this->validate([
-            'title' => [
+            'summary' => [
                 new NotBlank()
             ],
-            'description' => []
+            'plan' => [],
+            'risk' => []
         ]);
         $task = Task::find($this->getParameter('taskId'));
-        $process = TaskProcess::find($this->getParameter('processId'));
-        if (!$task || !$process || $process->getTask()->getId() !== $task->getId()) {
-            throw new HttpForbiddenException();
+        if (!$task || $task->isDraft()) {
+            throw new HttpForbiddenException('任务还未发布，不能提交报告');
         }
-        if (!$task->isDraft() && TaskReportMention::count(['process' => $process])) {
-            throw new HttpForbiddenException();
-        }
-        $process->update($data);
-        return response();
+        $report = (new TaskReport($data))
+            ->task($task)
+            ->assignee($this->getAuth())
+            ->save();
+        return response([
+            'id' => $report->getId()
+        ]);
     }
 }

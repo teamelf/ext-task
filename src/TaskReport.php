@@ -40,6 +40,13 @@ class TaskReport extends AbstractModel
     protected $assignee;
 
     /**
+     * @var boolean
+     *
+     * @Column(type="boolean", options={"default":TRUE})
+     */
+    protected $draft = true;
+
+    /**
      * @var string
      *
      * @Column(type="text")
@@ -99,10 +106,34 @@ class TaskReport extends AbstractModel
      * setter of $assignee
      *
      * @param Member $assignee
+     * @return $this
      */
     public function assignee(Member $assignee)
     {
         $this->assignee = $assignee;
+        return $this;
+    }
+
+    /**
+     * getter of $draft
+     *
+     * @return boolean
+     */
+    public function isDraft()
+    {
+        return !!$this->draft;
+    }
+
+    /**
+     * setter of $draft
+     *
+     * @param bool $draft
+     * @return $this
+     */
+    public function draft(bool $draft)
+    {
+        $this->draft = $draft;
+        return $this;
     }
 
     /**
@@ -173,4 +204,20 @@ class TaskReport extends AbstractModel
 
     // ----------------------------------------
     // | HELPER FUNCTIONS
+
+    /**
+     * get abstract of $summary
+     *
+     * @param int $length
+     * @return string
+     */
+    public function getAbstract($length = 100)
+    {
+        $introduction = $this->getSummary();
+        if (mb_strlen($introduction) > $length - 3) {
+            return mb_substr($introduction, 0, $length - 3) . '...';
+        } else {
+            return $introduction;
+        }
+    }
 }

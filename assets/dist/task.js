@@ -265,10 +265,10 @@ System.register('teamelf/task/TaskCardItem', [], function (_export, _context) {
 });
 'use strict';
 
-System.register('teamelf/task/TaskItem', ['teamelf/layout/Page', 'teamelf/task/TaskUpdater', 'teamelf/task/TaskProcessUpdater', 'teamelf/task/TaskAssigneeUpdater', 'teamelf/task/TaskProgressOverview'], function (_export, _context) {
+System.register('teamelf/task/TaskItem', ['teamelf/layout/Page', 'teamelf/task/TaskUpdater', 'teamelf/task/TaskProcessUpdater', 'teamelf/task/TaskAssigneeUpdater', 'teamelf/task/TaskTeamOverview', 'teamelf/task/TaskMemberOverview'], function (_export, _context) {
   "use strict";
 
-  var Page, TaskUpdater, TaskProcessUpdater, TaskAssigneeUpdater, TaskProgressOverview, _extends, _createClass, _antd, Row, Col, Radio, Button, _class;
+  var Page, TaskUpdater, TaskProcessUpdater, TaskAssigneeUpdater, TaskTeamOverview, TaskMemberOverview, _extends, _createClass, _antd, Row, Col, Radio, Button, _class;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -309,8 +309,10 @@ System.register('teamelf/task/TaskItem', ['teamelf/layout/Page', 'teamelf/task/T
       TaskProcessUpdater = _teamelfTaskTaskProcessUpdater.default;
     }, function (_teamelfTaskTaskAssigneeUpdater) {
       TaskAssigneeUpdater = _teamelfTaskTaskAssigneeUpdater.default;
-    }, function (_teamelfTaskTaskProgressOverview) {
-      TaskProgressOverview = _teamelfTaskTaskProgressOverview.default;
+    }, function (_teamelfTaskTaskTeamOverview) {
+      TaskTeamOverview = _teamelfTaskTaskTeamOverview.default;
+    }, function (_teamelfTaskTaskMemberOverview) {
+      TaskMemberOverview = _teamelfTaskTaskMemberOverview.default;
     }],
     execute: function () {
       _extends = Object.assign || function (target) {
@@ -625,15 +627,10 @@ System.register('teamelf/task/TaskItem', ['teamelf/layout/Page', 'teamelf/task/T
                 );
               } else if (this.mode.match(/^member_/)) {
                 var username = this.mode.substr('member_'.length);
-                return React.createElement(
-                  'div',
-                  null,
-                  username,
-                  ' view'
-                );
+                return React.createElement(TaskMemberOverview, _extends({}, this.state.task, { username: username }));
               } else {
                 // this.mode === 'team' or others
-                return React.createElement(TaskProgressOverview, this.state.task);
+                return React.createElement(TaskTeamOverview, this.state.task);
               }
             }
           }
@@ -786,6 +783,249 @@ System.register('teamelf/task/TaskList', ['teamelf/layout/Page', 'teamelf/task/T
 
         return _class;
       }(Page);
+
+      _export('default', _class);
+    }
+  };
+});
+'use strict';
+
+System.register('teamelf/task/TaskMemberOverview', ['teamelf/task/TaskReportEditor'], function (_export, _context) {
+  "use strict";
+
+  var TaskReportEditor, _extends, _createClass, _antd, Row, Col, Card, Button, Timeline, Table, _class;
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  function _possibleConstructorReturn(self, call) {
+    if (!self) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+
+    return call && (typeof call === "object" || typeof call === "function") ? call : self;
+  }
+
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }
+
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+  }
+
+  return {
+    setters: [function (_teamelfTaskTaskReportEditor) {
+      TaskReportEditor = _teamelfTaskTaskReportEditor.default;
+    }],
+    execute: function () {
+      _extends = Object.assign || function (target) {
+        for (var i = 1; i < arguments.length; i++) {
+          var source = arguments[i];
+
+          for (var key in source) {
+            if (Object.prototype.hasOwnProperty.call(source, key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+
+        return target;
+      };
+
+      _createClass = function () {
+        function defineProperties(target, props) {
+          for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ("value" in descriptor) descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+          }
+        }
+
+        return function (Constructor, protoProps, staticProps) {
+          if (protoProps) defineProperties(Constructor.prototype, protoProps);
+          if (staticProps) defineProperties(Constructor, staticProps);
+          return Constructor;
+        };
+      }();
+
+      _antd = antd;
+      Row = _antd.Row;
+      Col = _antd.Col;
+      Card = _antd.Card;
+      Button = _antd.Button;
+      Timeline = _antd.Timeline;
+      Table = _antd.Table;
+
+      _class = function (_React$Component) {
+        _inherits(_class, _React$Component);
+
+        function _class(props) {
+          _classCallCheck(this, _class);
+
+          var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this, props));
+
+          _this.state = {
+            processes: [],
+            reports: []
+          };
+          _this.fetchProcesses();
+          _this.fetchReports();
+          return _this;
+        }
+
+        _createClass(_class, [{
+          key: 'fetchProcesses',
+          value: function fetchProcesses() {
+            var _this2 = this;
+
+            return axios.get('task/' + this.props.id + '/process').then(function (r) {
+              _this2.setState({ processes: r.data });
+              return r;
+            });
+          }
+        }, {
+          key: 'fetchReports',
+          value: function fetchReports() {
+            var _this3 = this;
+
+            return axios.get('task/' + this.props.id + '/report').then(function (r) {
+              _this3.setState({ reports: r.data });
+              return r;
+            });
+          }
+        }, {
+          key: 'submitReport',
+          value: function submitReport(reportId) {
+            var _this4 = this;
+
+            antd.Modal.confirm({
+              title: '不可撤销',
+              content: "确认要提交总结么，提交后您将不能对此总结做任何修改操作",
+              onOk: function onOk() {
+                axios.post('task/' + _this4.props.id + '/report/' + reportId).then(function (r) {
+                  _this4.fetchReports();
+                });
+              }
+            });
+          }
+        }, {
+          key: 'render',
+          value: function render() {
+            var _this5 = this;
+
+            var columns = [{
+              title: '创建时间',
+              dataIndex: 'createdAt',
+              key: 'createdAt',
+              render: function render(text, record, index) {
+                return moment.unix(text).format('YYYY-MM-DD HH:mm:ss');
+              }
+            }, {
+              title: '最后修改',
+              dataIndex: 'updatedAt',
+              key: 'updatedAt',
+              render: function render(text, record, index) {
+                return moment.unix(text).format('YYYY-MM-DD HH:mm:ss');
+              }
+            }, {
+              title: '概览',
+              dataIndex: 'abstract',
+              key: 'abstract',
+              render: function render(text, record, index) {
+                return [record.draft && React.createElement(
+                  'span',
+                  { style: { color: 'red' } },
+                  '[\u8349\u7A3F] '
+                ), text];
+              }
+            }, {
+              title: React.createElement(
+                Row,
+                { type: 'flex', gutter: 16 },
+                React.createElement(
+                  Col,
+                  null,
+                  React.createElement(TaskReportEditor, {
+                    taskId: this.props.id,
+                    onEdit: this.fetchReports.bind(this)
+                  })
+                ),
+                React.createElement(
+                  Col,
+                  null,
+                  React.createElement(
+                    Button,
+                    {
+                      type: 'dashed',
+                      icon: 'reload',
+                      onClick: this.fetchReports.bind(this)
+                    },
+                    '\u5237\u65B0'
+                  )
+                )
+              ),
+              key: 'operation',
+              render: function render(text, record, index) {
+                return React.createElement(
+                  Row,
+                  { type: 'flex', gutter: 16 },
+                  React.createElement(
+                    Col,
+                    null,
+                    React.createElement(TaskReportEditor, _extends({
+                      readonly: true,
+                      taskId: _this5.props.id
+                    }, record))
+                  ),
+                  record.draft && React.createElement(
+                    Col,
+                    null,
+                    React.createElement(TaskReportEditor, _extends({
+                      taskId: _this5.props.id
+                    }, record, {
+                      onEdit: _this5.fetchReports.bind(_this5)
+                    }))
+                  ),
+                  record.draft && React.createElement(
+                    Col,
+                    null,
+                    React.createElement(
+                      Button,
+                      {
+                        type: 'dashed',
+                        onClick: _this5.submitReport.bind(_this5, record.id)
+                      },
+                      '\u63D0\u4EA4'
+                    )
+                  )
+                );
+              }
+            }];
+            return [React.createElement(Table, {
+              style: { background: '#fff' },
+              dataSource: this.state.reports,
+              columns: columns,
+              pagination: false
+            })];
+          }
+        }]);
+
+        return _class;
+      }(React.Component);
 
       _export('default', _class);
     }
@@ -1043,12 +1283,28 @@ System.register('teamelf/task/TaskProcessUpdater', [], function (_export, _conte
                       React.createElement(
                         'strong',
                         null,
-                        o.title
+                        'process#',
+                        o.id
                       )
                     ),
                     React.createElement(
                       'div',
+                      null,
+                      React.createElement(
+                        'strong',
+                        null,
+                        '\u540D\u79F0\uFF1A'
+                      ),
+                      o.title
+                    ),
+                    React.createElement(
+                      'div',
                       { style: { color: '#757575' } },
+                      React.createElement(
+                        'strong',
+                        null,
+                        '\u63CF\u8FF0\uFF1A'
+                      ),
                       o.description
                     )
                   );
@@ -1063,7 +1319,7 @@ System.register('teamelf/task/TaskProcessUpdater', [], function (_export, _conte
                 React.createElement(
                   'strong',
                   null,
-                  '\u4EFB\u52A1\u540D\u79F0'
+                  '\u6D41\u7A0B\u540D\u79F0'
                 ),
                 React.createElement(Input, {
                   value: this.state.processTitle,
@@ -1078,7 +1334,7 @@ System.register('teamelf/task/TaskProcessUpdater', [], function (_export, _conte
                 React.createElement(
                   'strong',
                   null,
-                  '\u4EFB\u52A1\u63CF\u8FF0'
+                  '\u6D41\u7A0B\u63CF\u8FF0'
                 ),
                 React.createElement(Input.TextArea, {
                   autosize: { minRows: 6, maxRows: 6 },
@@ -1099,9 +1355,340 @@ System.register('teamelf/task/TaskProcessUpdater', [], function (_export, _conte
     }
   };
 });
+'use strict';
+
+System.register('teamelf/task/TaskReportEditor', [], function (_export, _context) {
+  "use strict";
+
+  var _createClass, _antd, Button, Modal, Input, Divider, _class;
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  function _possibleConstructorReturn(self, call) {
+    if (!self) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+
+    return call && (typeof call === "object" || typeof call === "function") ? call : self;
+  }
+
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }
+
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+  }
+
+  return {
+    setters: [],
+    execute: function () {
+      _createClass = function () {
+        function defineProperties(target, props) {
+          for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ("value" in descriptor) descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+          }
+        }
+
+        return function (Constructor, protoProps, staticProps) {
+          if (protoProps) defineProperties(Constructor.prototype, protoProps);
+          if (staticProps) defineProperties(Constructor, staticProps);
+          return Constructor;
+        };
+      }();
+
+      _antd = antd;
+      Button = _antd.Button;
+      Modal = _antd.Modal;
+      Input = _antd.Input;
+      Divider = _antd.Divider;
+
+      _class = function (_React$Component) {
+        _inherits(_class, _React$Component);
+
+        function _class(props) {
+          _classCallCheck(this, _class);
+
+          var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this, props));
+
+          _this.state = {
+            visible: false,
+            summary: '',
+            plan: '',
+            risk: ''
+          };
+          return _this;
+        }
+
+        _createClass(_class, [{
+          key: 'openModal',
+          value: function openModal() {
+            this.setState({ visible: true });
+            if (this.props.id) {
+              this.fetchReport();
+            }
+          }
+        }, {
+          key: 'closeModal',
+          value: function closeModal() {
+            this.setState({ visible: false });
+          }
+        }, {
+          key: 'createReport',
+          value: function createReport() {
+            var _this2 = this;
+
+            var data = {
+              summary: this.state.summary,
+              plan: this.state.plan,
+              risk: this.state.risk
+            };
+            return axios.post('task/' + this.props.taskId + '/report', data).then(function (r) {
+              _this2.props.onEdit().then(function (r) {
+                _this2.closeModal();
+              });
+            });
+          }
+        }, {
+          key: 'fetchReport',
+          value: function fetchReport() {
+            var _this3 = this;
+
+            axios.get('task/' + this.props.taskId + '/report/' + this.props.id).then(function (r) {
+              _this3.setState({
+                summary: r.data.summary,
+                plan: r.data.plan,
+                risk: r.data.risk
+              });
+            });
+          }
+        }, {
+          key: 'updateReport',
+          value: function updateReport() {
+            var _this4 = this;
+
+            var data = {
+              summary: this.state.summary,
+              plan: this.state.plan,
+              risk: this.state.risk
+            };
+            return axios.put('task/' + this.props.taskId + '/report/' + this.props.id, data).then(function (r) {
+              _this4.props.onEdit().then(function (r) {
+                _this4.closeModal();
+              });
+            });
+          }
+        }, {
+          key: 'render',
+          value: function render() {
+            var _this5 = this;
+
+            var renderEditors = function renderEditors() {
+              return [React.createElement(
+                'div',
+                { style: { marginBottom: 16 } },
+                React.createElement(
+                  'div',
+                  null,
+                  '\u60A8\u53EF\u4EE5\u5728\u4EFB\u4F55\u5730\u65B9\u5199 process#ID \u6765\u5173\u8054\u4E00\u4E2A\u4EFB\u52A1\u6D41\u7A0B'
+                ),
+                React.createElement(
+                  'div',
+                  null,
+                  '\u52A0\u4E0A finish|close|fix|done|finished|closed|fixed \u524D\u7F00\u53EF\u8868\u793A\u60A8\u5DF2\u5B8C\u6210\u8BE5\u4EFB\u52A1\u6D41\u7A0B'
+                ),
+                React.createElement(
+                  'div',
+                  null,
+                  '\u4F8B\u5982'
+                ),
+                React.createElement(
+                  'ul',
+                  null,
+                  React.createElement(
+                    'li',
+                    null,
+                    '....\u60A8\u7684\u603B\u7ED3... done process#K38D5fdadsXbiGP6hudLiK ...\u60A8\u7684\u603B\u7ED3...'
+                  ),
+                  React.createElement(
+                    'li',
+                    null,
+                    '....\u60A8\u7684\u603B\u7ED3... process#K38D5fdadsXbiGP6hudLiK ...\u60A8\u7684\u603B\u7ED3...'
+                  )
+                )
+              ), React.createElement(
+                'div',
+                { style: { marginBottom: 16 } },
+                React.createElement(
+                  'strong',
+                  null,
+                  '\u603B\u7ED3'
+                ),
+                React.createElement(Input.TextArea, {
+                  autosize: { minRows: 5, maxRows: 5 },
+                  value: _this5.state.summary,
+                  onChange: function onChange(e) {
+                    return _this5.setState({ summary: e.target.value });
+                  }
+                })
+              ), React.createElement(
+                'div',
+                { style: { marginBottom: 16 } },
+                React.createElement(
+                  'strong',
+                  null,
+                  '\u540E\u7EED\u8BA1\u5212'
+                ),
+                React.createElement(Input.TextArea, {
+                  autosize: { minRows: 5, maxRows: 5 },
+                  value: _this5.state.plan,
+                  onChange: function onChange(e) {
+                    return _this5.setState({ plan: e.target.value });
+                  }
+                })
+              ), React.createElement(
+                'div',
+                { style: { marginBottom: 16 } },
+                React.createElement(
+                  'strong',
+                  null,
+                  '\u98CE\u9669\u8BF4\u660E'
+                ),
+                React.createElement(Input.TextArea, {
+                  autosize: { minRows: 5, maxRows: 5 },
+                  value: _this5.state.risk,
+                  onChange: function onChange(e) {
+                    return _this5.setState({ risk: e.target.value });
+                  }
+                })
+              )];
+            };
+            if (this.props.id) {
+              if (this.props.readonly) {
+                return [React.createElement(
+                  Button,
+                  {
+                    onClick: this.openModal.bind(this)
+                  },
+                  '\u67E5\u770B'
+                ), React.createElement(
+                  Modal,
+                  {
+                    width: '680',
+                    title: '查看报告 #' + this.props.id,
+                    visible: this.state.visible,
+                    footer: null,
+                    onCancel: this.closeModal.bind(this)
+                  },
+                  React.createElement(
+                    'h2',
+                    null,
+                    '\u603B\u7ED3'
+                  ),
+                  React.createElement('div', {
+                    style: { border: '1px solid #dcdcdc', padding: 16 },
+                    dangerouslySetInnerHTML: { __html: marked(this.state.summary) }
+                  }),
+                  React.createElement(Divider, null),
+                  React.createElement(
+                    'h2',
+                    null,
+                    '\u540E\u7EED\u8BA1\u5212'
+                  ),
+                  React.createElement('div', {
+                    style: { border: '1px solid #dcdcdc', padding: 16 },
+                    dangerouslySetInnerHTML: { __html: marked(this.state.plan) }
+                  }),
+                  React.createElement(Divider, null),
+                  React.createElement(
+                    'h2',
+                    null,
+                    '\u98CE\u9669\u8BF4\u660E'
+                  ),
+                  React.createElement('div', {
+                    style: { border: '1px solid #dcdcdc', padding: 16 },
+                    dangerouslySetInnerHTML: { __html: marked(this.state.risk) }
+                  }),
+                  React.createElement(Divider, null)
+                )];
+              } else {
+                return [React.createElement(
+                  Button,
+                  {
+                    type: 'primary',
+                    onClick: this.openModal.bind(this)
+                  },
+                  '\u7F16\u8F91'
+                ), React.createElement(
+                  Modal,
+                  {
+                    width: '680',
+                    title: '编辑报告 #' + this.props.id,
+                    visible: this.state.visible,
+                    onOk: this.updateReport.bind(this),
+                    onCancel: this.closeModal.bind(this)
+                  },
+                  renderEditors()
+                )];
+              }
+            } else {
+              // new report
+              return [React.createElement(
+                Button,
+                {
+                  type: 'primary',
+                  onClick: this.openModal.bind(this)
+                },
+                '\u65B0\u5EFA\u62A5\u544A'
+              ), React.createElement(
+                Modal,
+                {
+                  width: '680',
+                  title: '\u65B0\u5EFA\u62A5\u544A',
+                  visible: this.state.visible,
+                  footer: [React.createElement(
+                    Button,
+                    { onClick: this.closeModal.bind(this) },
+                    '\u53D6\u6D88'
+                  ), React.createElement(
+                    Button,
+                    { type: 'primary', onClick: this.createReport.bind(this) },
+                    '\u4FDD\u5B58\u8349\u7A3F'
+                  )],
+                  onCancel: this.closeModal.bind(this)
+                },
+                renderEditors()
+              )];
+            }
+          }
+        }]);
+
+        return _class;
+      }(React.Component);
+
+      _export('default', _class);
+    }
+  };
+});
 "use strict";
 
-System.register("teamelf/task/TaskProgressOverview", [], function (_export, _context) {
+System.register("teamelf/task/TaskTeamOverview", [], function (_export, _context) {
   "use strict";
 
   var _createClass, _antd, Row, Col, Card, Progress, Avatar, Popover, List, _class;
@@ -1220,7 +1807,7 @@ System.register("teamelf/task/TaskProgressOverview", [], function (_export, _con
                     className: "task-overview",
                     title: this.props.name
                   },
-                  React.createElement("div", { dangerouslySetInnerHTML: { __html: marked(this.props.introduction) } })
+                  React.createElement("div", { dangerouslySetInnerHTML: { __html: marked(this.props.introduction || '') } })
                 )
               ),
               React.createElement(
@@ -1263,8 +1850,7 @@ System.register("teamelf/task/TaskProgressOverview", [], function (_export, _con
                 React.createElement(
                   Card,
                   {
-                    style: { marginBottom: 16 },
-                    title: "\u4E2A\u4EBA\u60C5\u51B5"
+                    style: { marginBottom: 16 }
                   },
                   this.state.assignees.map(function (o) {
                     return React.createElement(

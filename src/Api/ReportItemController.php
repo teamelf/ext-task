@@ -12,14 +12,12 @@
 namespace TeamELF\Ext\Task\Api;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use TeamELF\Exception\HttpForbiddenException;
 use TeamELF\Ext\Task\Task;
-use TeamELF\Ext\Task\TaskProcess;
-use TeamELF\Ext\Task\TaskReportMention;
+use TeamELF\Ext\Task\TaskReport;
 use TeamELF\Http\AbstractController;
 
-class ProcessUpdateController extends AbstractController
+class ReportItemController extends AbstractController
 {
     protected $needPermissions = ['task.update'];
 
@@ -31,21 +29,19 @@ class ProcessUpdateController extends AbstractController
      */
     public function handler(): Response
     {
-        $data = $this->validate([
-            'title' => [
-                new NotBlank()
-            ],
-            'description' => []
-        ]);
         $task = Task::find($this->getParameter('taskId'));
-        $process = TaskProcess::find($this->getParameter('processId'));
-        if (!$task || !$process || $process->getTask()->getId() !== $task->getId()) {
+        $report = TaskReport::find($this->getParameter('reportId'));
+        if (!$task || !$report || $report->getTask()->getId() !== $task->getId()) {
             throw new HttpForbiddenException();
         }
-        if (!$task->isDraft() && TaskReportMention::count(['process' => $process])) {
-            throw new HttpForbiddenException();
-        }
-        $process->update($data);
-        return response();
+        return response([
+            'id' => $report->getId(),
+            'createdAt' => $report->getCreatedAt() ? $report->getCreatedAt()->getTimestamp() : null,
+            'updatedAt' => $report->getUpdatedAt() ? $report->getUpdatedAt()->getTimestamp() : null,
+            'summary' => $report->getSummary(),
+            'plan' => $report->getPlan(),
+            'risk' => $report->getRisk(),
+            'draft' => $report->isDraft()
+        ]);
     }
 }

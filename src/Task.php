@@ -181,13 +181,14 @@ class Task extends AbstractModel
     /**
      * get abstract of $introduction
      *
+     * @param int $length
      * @return string
      */
-    public function getAbstract()
+    public function getAbstract($length = 100)
     {
         $introduction = $this->getIntroduction();
-        if (mb_strlen($introduction) > 97) {
-            return mb_substr($introduction, 0, 97) . '...';
+        if (mb_strlen($introduction) > $length - 3) {
+            return mb_substr($introduction, 0, $length - 3) . '...';
         } else {
             return $introduction;
         }

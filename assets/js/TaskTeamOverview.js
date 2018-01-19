@@ -39,7 +39,7 @@ export default class extends React.Component {
             className="task-overview"
             title={this.props.name}
           >
-            <div dangerouslySetInnerHTML={{__html: marked(this.props.introduction)}}/>
+            <div dangerouslySetInnerHTML={{__html: marked(this.props.introduction || '')}}/>
           </Card>
         </Col>
         <Col xs={24} md={12}>
@@ -73,7 +73,6 @@ export default class extends React.Component {
         <Col xs={24}>
           <Card
             style={{marginBottom: 16}}
-            title="个人情况"
           >
             {this.state.assignees.map(o => (
               <Card.Grid style={{width: '100%'}}>

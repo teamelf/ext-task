@@ -58,6 +58,13 @@ class TaskReportMention extends AbstractModel
      */
     protected $assignee;
 
+    /**
+     * @var string
+     *
+     * @Column(type="string", nullable=TRUE)
+     */
+    protected $prefix;
+
     // ----------------------------------------
     // | GETTERS & SETTERS
 
@@ -146,6 +153,27 @@ class TaskReportMention extends AbstractModel
     public function assignee(Member $assignee)
     {
         $this->assignee = $assignee;
+        return $this;
+    }
+
+    /**
+     * getter of $prefix
+     *
+     * @return string
+     */
+    public function getPrefix()
+    {
+        return $this->prefix;
+    }
+
+    /**
+     * setter of $prefix
+     *
+     * @param string $prefix
+     * @return $this
+     */
+    public function prefix($prefix) {
+        $this->prefix = $prefix;
         return $this;
     }
 

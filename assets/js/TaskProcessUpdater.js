@@ -133,22 +133,23 @@ export default class extends React.Component {
         <Timeline>
           {this.state.processes.map(o => (
             <Timeline.Item>
-              <a onClick={this.showEditor.bind(this, o)}><strong>{o.title}</strong></a>
-              <div style={{color: '#757575'}}>{o.description}</div>
+              <a onClick={this.showEditor.bind(this, o)}><strong>process#{o.id}</strong></a>
+              <div><strong>名称：</strong>{o.title}</div>
+              <div style={{color: '#757575'}}><strong>描述：</strong>{o.description}</div>
             </Timeline.Item>
           ))}
         </Timeline>
       </Card>,
       <Modal {...this.state.modal}>
         <div style={{marginBottom: 16}}>
-          <strong>任务名称</strong>
+          <strong>流程名称</strong>
           <Input
             value={this.state.processTitle}
             onChange={e => this.setState({processTitle: e.target.value})}
           />
         </div>
         <div style={{marginBottom: 16}}>
-          <strong>任务描述</strong>
+          <strong>流程描述</strong>
           <Input.TextArea
             autosize={{minRows: 6, maxRows: 6}}
             value={this.state.processDescription}
