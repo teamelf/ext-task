@@ -205,18 +205,6 @@ class Task extends AbstractModel
     public function can(Member $member, $permission)
     {
         switch ($permission) {
-            case 'assignee.create':
-            case 'assignee.delete':
-            case 'process.create':
-            case 'process.delete':
-            case 'process.update':
-            case 'report.create':
-            case 'report.delete':
-            case 'report.item':
-            case 'report.list':
-            case 'report.submit':
-            case 'report.update':
-                //////
             case 'item':
                 if (TaskAssignee::count(['task' => $this, 'assignee' => $member])) {
                     return true;
