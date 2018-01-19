@@ -30,6 +30,7 @@ use TeamELF\Ext\Task\Api\TaskDeleteController;
 use TeamELF\Ext\Task\Api\TaskItemController;
 use TeamELF\Ext\Task\Api\TaskListController;
 use TeamELF\Ext\Task\Api\TaskPublishController;
+use TeamELF\Ext\Task\Api\TaskStatisticsController;
 use TeamELF\Ext\Task\Api\TaskUpdateController;
 
 class RoutesListener
@@ -49,6 +50,7 @@ class RoutesListener
             ->put('task-update', '/{taskId}', TaskUpdateController::class)
             ->delete('task-delete', '/{taskId}', TaskDeleteController::class)
             ->post('task-publish', '/{taskId}', TaskPublishController::class)
+            ->get('task-statistics', '/{taskId}/statistics', TaskStatisticsController::class)
 
             ->prefix('/api/task/{taskId}/process')
             ->get('task-process-list', '', ProcessListController::class)

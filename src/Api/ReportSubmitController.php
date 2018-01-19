@@ -28,17 +28,17 @@ class ReportSubmitController extends AbstractController
     {
         $matches = [];
         preg_match_all(
-            '/\b(finish|close|fix|done|finished|closed|fixed)?\b (task|process|assignee)#([0-9A-Za-z]*)\b/',
+            '/(\b(finish|close|fix|done|finished|closed|fixed)\b )?(task|process|assignee)#([0-9A-Za-z]*)\b/',
             $content, $matches, PREG_SET_ORDER
         );
 //        var_dump($matches);
         $mentions = [];
         foreach ($matches as $match) {
-            $obj = Task::find($match[3]) ?? TaskProcess::find($match[3]) ?? TaskAssignee::find($match[3]);
+            $obj = Task::find($match[4]) ?? TaskProcess::find($match[4]) ?? TaskAssignee::find($match[4]);
             if ($obj) {
                 $mentions[] = [
-                    'prefix' => $match[1],
-                    'category' => $match[2],
+                    'prefix' => $match[2],
+                    'category' => $match[3],
                     'obj' => $obj
                 ];
             }

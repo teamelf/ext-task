@@ -1763,10 +1763,12 @@ System.register("teamelf/task/TaskTeamOverview", [], function (_export, _context
 
           _this.state = {
             assignees: [],
-            processes: []
+            processes: [],
+            statistics: null
           };
           _this.fetchAssignees();
           _this.fetchProcesses();
+          _this.fetchStatistics();
           return _this;
         }
 
@@ -1790,9 +1792,18 @@ System.register("teamelf/task/TaskTeamOverview", [], function (_export, _context
             });
           }
         }, {
+          key: "fetchStatistics",
+          value: function fetchStatistics() {
+            var _this4 = this;
+
+            axios.get("task/" + this.props.id + "/statistics").then(function (r) {
+              _this4.setState({ statistics: r.data });
+            });
+          }
+        }, {
           key: "render",
           value: function render() {
-            var _this4 = this;
+            var _this5 = this;
 
             return React.createElement(
               Row,
@@ -1813,12 +1824,12 @@ System.register("teamelf/task/TaskTeamOverview", [], function (_export, _context
               React.createElement(
                 Col,
                 { xs: 24, md: 12 },
-                React.createElement(
+                !!this.state.statistics && React.createElement(
                   Card,
                   {
                     style: { marginBottom: 16 },
                     className: "task-overview",
-                    title: React.createElement(Progress, { percent: 30 })
+                    title: React.createElement(Progress, { percent: this.state.statistics.progress })
                   },
                   React.createElement(List, {
                     itemLayout: "horizontal",
@@ -1831,9 +1842,9 @@ System.register("teamelf/task/TaskTeamOverview", [], function (_export, _context
                           avatar: React.createElement(Progress, {
                             type: "circle",
                             width: "70",
-                            percent: 70,
+                            percent: _this5.state.statistics.process[o.id].progress,
                             format: function format(percent) {
-                              return percent + " Days";
+                              return _this5.state.statistics.process[o.id].total + " \u62A5\u544A";
                             }
                           }),
                           title: o.title,
@@ -1847,11 +1858,9 @@ System.register("teamelf/task/TaskTeamOverview", [], function (_export, _context
               React.createElement(
                 Col,
                 { xs: 24 },
-                React.createElement(
+                !!this.state.statistics && React.createElement(
                   Card,
-                  {
-                    style: { marginBottom: 16 }
-                  },
+                  { style: { marginBottom: 16 } },
                   this.state.assignees.map(function (o) {
                     return React.createElement(
                       Card.Grid,
@@ -1872,15 +1881,32 @@ System.register("teamelf/task/TaskTeamOverview", [], function (_export, _context
                         React.createElement(
                           Col,
                           { xs: { span: 24, order: 3 }, md: { span: 16, order: 2 } },
-                          _this4.state.processes.map(function (o) {
-                            return React.createElement("div", {
-                              style: {
-                                display: 'inline-block',
-                                height: 24,
-                                width: 100.0 / _this4.state.processes.length + "%",
-                                border: '1px solid #dcdcdc'
-                              }
-                            });
+                          _this5.state.processes.map(function (p) {
+                            return React.createElement(
+                              "div",
+                              {
+                                style: {
+                                  display: 'inline-block',
+                                  height: 24,
+                                  textAlign: 'center',
+                                  width: 100.0 / _this5.state.processes.length + "%",
+                                  border: '1px solid #dcdcdc',
+                                  color: 'white',
+                                  background: function () {
+                                    var s = _this5.state.statistics.process[p.id].assignee[o.username];
+                                    if (s.done) {
+                                      return '#52c41a';
+                                    } else if (s.total) {
+                                      return '#1890ff';
+                                    } else {
+                                      return '#aaa';
+                                    }
+                                  }()
+                                }
+                              },
+                              _this5.state.statistics.process[p.id].assignee[o.username].total,
+                              " \u62A5\u544A"
+                            );
                           })
                         ),
                         React.createElement(
