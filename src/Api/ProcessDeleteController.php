@@ -39,6 +39,7 @@ class ProcessDeleteController extends AbstractController
         if (!$task->isDraft() && TaskReportMention::count(['process' => $process])) {
             throw new HttpForbiddenException('已经有报告提到过该流程，不能删除');
         }
+        $this->log('info', 'Remove process [' . $process->getId() . '] in task [' . $task->getId() . ']');
         $process->delete();
         return response();
     }

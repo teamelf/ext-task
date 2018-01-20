@@ -33,6 +33,7 @@ class TaskDeleteController extends AbstractController
         if (!$task->can($this->getAuth(), 'delete')) {
             throw new HttpForbiddenException();
         }
+        $this->log('info', 'Delete task [' . $task->getId() . ']');
         $task->delete();
         return response();
     }

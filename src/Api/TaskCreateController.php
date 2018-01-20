@@ -37,6 +37,7 @@ class TaskCreateController extends AbstractController
             ->task($task)
             ->admin(true)
             ->save();
+        $this->log('info', 'Create a task [' . $task->getId() . ']');
         return response([
             'id' => $task->getId()
         ]);

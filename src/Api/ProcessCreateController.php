@@ -43,6 +43,7 @@ class ProcessCreateController extends AbstractController
         if (!$process->can($this->getAuth(), 'create')) {
             throw new HttpForbiddenException();
         }
+        $this->log('info', 'Add a process [' . $process->getId() . '] in task [' . $task->getId() . ']');
         $process->save();
         return response([
             'id' => $process->getId()

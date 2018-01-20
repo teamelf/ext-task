@@ -52,6 +52,7 @@ class AssigneeCreateController extends AbstractController
         if (!$assignee->can($this->getAuth(), 'create')) {
             throw new HttpForbiddenException();
         }
+        $this->log('info', 'Add an assignee [' . $assignee->getAssignee()->getUsername() . '] in task [' . $task->getId() . ']');
         $assignee->save();
         return response([
             'id' => $assignee->getId()

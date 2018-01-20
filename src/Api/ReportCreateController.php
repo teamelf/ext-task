@@ -45,6 +45,7 @@ class ReportCreateController extends AbstractController
         if (!$report->can($this->getAuth(), 'create')) {
             throw new HttpForbiddenException();
         }
+        $this->log('info', 'Create a report [' . $report->getId() . '] in task [' . $task->getId() . ']');
         $report->save();
         return response([
             'id' => $report->getId()

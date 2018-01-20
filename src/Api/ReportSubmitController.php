@@ -101,6 +101,7 @@ class ReportSubmitController extends AbstractController
         }
         $this->handleMentions($report);
         $report->draft(false)->save();
+        $this->log('info', 'Submit report [' . $report->getId() . '] in task [' . $task->getId() . ']');
         return response();
     }
 }

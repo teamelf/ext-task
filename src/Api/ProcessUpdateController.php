@@ -46,6 +46,7 @@ class ProcessUpdateController extends AbstractController
         if (!$task->isDraft() && TaskReportMention::count(['process' => $process])) {
             throw new HttpForbiddenException();
         }
+        $this->log('info', 'Update process [' . $process->getId() . '] in task [' . $task->getId() . ']');
         $process->update($data);
         return response();
     }

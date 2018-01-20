@@ -47,6 +47,7 @@ class ReportUpdateController extends AbstractController
             throw new HttpForbiddenException();
         }
         $report->update($data);
+        $this->log('info', 'Update report [' . $report->getId() . '] in task [' . $task->getId() . ']');
         return response();
     }
 }

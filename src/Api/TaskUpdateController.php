@@ -39,6 +39,7 @@ class TaskUpdateController extends AbstractController
         if (!$task || !$task->isDraft()) {
             throw new HttpForbiddenException();
         }
+        $this->log('info', 'Update task [' . $task->getId() . ']');
         $task->update($data);
         return response();
     }

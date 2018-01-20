@@ -33,6 +33,7 @@ class TaskPublishController extends AbstractController
         if (!$task || !$task->isDraft()) {
             throw new HttpForbiddenException();
         }
+        $this->log('info', 'Publish task [' . $task->getId() . ']');
         $task->draft(false)->save();
         return response();
     }

@@ -38,6 +38,7 @@ class ReportDeleteController extends AbstractController
         if (!$report->isDraft()) {
             throw new HttpForbiddenException('报告已提交，不能删除');
         }
+        $this->log('info', 'Remove report [' . $report->getId() . '] in task [' . $task->getId() . ']');
         $report->delete();
         return response();
     }

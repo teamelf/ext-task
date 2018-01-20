@@ -42,6 +42,7 @@ class AssigneeDeleteController extends AbstractController
         if (!$task->isDraft() && TaskReport::count(['task' => $task, 'assignee' => $assignee]) > 0) {
             throw new HttpForbiddenException('该成员已经提交过报告，不能删除');
         }
+        $this->log('info', 'Remove assignee [' . $assignee->getAssignee()->getUsername() . '] in task [' . $task->getId() . ']');
         $assignee->delete();
         return response();
     }
