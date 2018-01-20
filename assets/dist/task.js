@@ -1602,6 +1602,7 @@ System.register('teamelf/task/TaskReportEditor', [], function (_export, _context
                     '\u603B\u7ED3'
                   ),
                   React.createElement('div', {
+                    className: 'markdown',
                     style: { border: '1px solid #dcdcdc', padding: 16 },
                     dangerouslySetInnerHTML: { __html: marked(this.state.summary) }
                   }),
@@ -1612,6 +1613,7 @@ System.register('teamelf/task/TaskReportEditor', [], function (_export, _context
                     '\u540E\u7EED\u8BA1\u5212'
                   ),
                   React.createElement('div', {
+                    className: 'markdown',
                     style: { border: '1px solid #dcdcdc', padding: 16 },
                     dangerouslySetInnerHTML: { __html: marked(this.state.plan) }
                   }),
@@ -1622,6 +1624,7 @@ System.register('teamelf/task/TaskReportEditor', [], function (_export, _context
                     '\u98CE\u9669\u8BF4\u660E'
                   ),
                   React.createElement('div', {
+                    className: 'markdown',
                     style: { border: '1px solid #dcdcdc', padding: 16 },
                     dangerouslySetInnerHTML: { __html: marked(this.state.risk) }
                   }),
@@ -1818,7 +1821,10 @@ System.register("teamelf/task/TaskTeamOverview", [], function (_export, _context
                     className: "task-overview",
                     title: this.props.name
                   },
-                  React.createElement("div", { dangerouslySetInnerHTML: { __html: marked(this.props.introduction || '') } })
+                  React.createElement("div", {
+                    className: "markdown",
+                    dangerouslySetInnerHTML: { __html: marked(this.props.introduction || '') }
+                  })
                 )
               ),
               React.createElement(
