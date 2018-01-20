@@ -20,8 +20,6 @@ use TeamELF\Http\AbstractController;
 
 class ReportUpdateController extends AbstractController
 {
-    protected $needLogin = true;
-
     /**
      * handle the request
      *

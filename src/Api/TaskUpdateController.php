@@ -20,8 +20,6 @@ use TeamELF\Http\AbstractController;
 
 class TaskUpdateController extends AbstractController
 {
-    protected $needLogin = true;
-
     /**
      * handle the request
      *

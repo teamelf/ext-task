@@ -18,8 +18,6 @@ use TeamELF\Http\AbstractController;
 
 class TaskPublishController extends AbstractController
 {
-    protected $needLogin = true;
-
     /**
      * handle the request
      *

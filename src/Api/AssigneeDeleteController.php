@@ -23,8 +23,6 @@ use TeamELF\Http\AbstractController;
 
 class AssigneeDeleteController extends AbstractController
 {
-    protected $needLogin = true;
-
     /**
      * handle the request
      *

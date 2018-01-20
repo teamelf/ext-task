@@ -19,8 +19,6 @@ use TeamELF\Http\AbstractController;
 
 class ReportItemController extends AbstractController
 {
-    protected $needLogin = true;
-
     /**
      * handle the request
      *

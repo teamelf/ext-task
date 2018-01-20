@@ -17,8 +17,6 @@ use TeamELF\Http\AbstractController;
 
 class TaskListController extends AbstractController
 {
-    protected $needLogin = true;
-
     /**
      * handle the request
      *

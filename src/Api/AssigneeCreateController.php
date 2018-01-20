@@ -22,8 +22,6 @@ use TeamELF\Http\AbstractController;
 
 class AssigneeCreateController extends AbstractController
 {
-    protected $needLogin = true;
-
     /**
      * handle the request
      *

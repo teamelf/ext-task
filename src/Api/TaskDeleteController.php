@@ -18,8 +18,6 @@ use TeamELF\Http\AbstractController;
 
 class TaskDeleteController extends AbstractController
 {
-    protected $needLogin = true;
-
     /**
      * handle the request
      *

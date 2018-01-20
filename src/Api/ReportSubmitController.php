@@ -22,8 +22,6 @@ use TeamELF\Http\AbstractController;
 
 class ReportSubmitController extends AbstractController
 {
-    protected $needLogin = true;
-
     protected function findMentions($content)
     {
         $matches = [];
