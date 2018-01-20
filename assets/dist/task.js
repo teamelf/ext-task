@@ -250,7 +250,7 @@ System.register('teamelf/task/TaskCardItem', [], function (_export, _context) {
               React.createElement(
                 'div',
                 null,
-                this.props.introduction
+                this.props.abstract
               )
             );
           }

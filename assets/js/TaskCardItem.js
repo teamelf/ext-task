@@ -20,7 +20,7 @@ export default class extends React.Component {
         onClick={e => window.location.href = '/task/' + this.props.id + '?mode=' + (this.props.draft ? 'edit' : 'team')}
       >
         <small>任务简介</small>
-        <div>{this.props.introduction}</div>
+        <div>{this.props.abstract}</div>
       </Card>
     );
   }
