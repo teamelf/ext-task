@@ -112,18 +112,21 @@ export default class extends React.Component {
           >
             <h2>总结</h2>
             <div
+              className="markdown"
               style={{border: '1px solid #dcdcdc', padding: 16}}
               dangerouslySetInnerHTML={{__html: marked(this.state.summary)}}
             />
             <Divider/>
             <h2>后续计划</h2>
             <div
+              className="markdown"
               style={{border: '1px solid #dcdcdc', padding: 16}}
               dangerouslySetInnerHTML={{__html: marked(this.state.plan)}}
             />
             <Divider/>
             <h2>风险说明</h2>
             <div
+              className="markdown"
               style={{border: '1px solid #dcdcdc', padding: 16}}
               dangerouslySetInnerHTML={{__html: marked(this.state.risk)}}
             />

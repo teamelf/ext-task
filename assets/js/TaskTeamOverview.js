@@ -46,7 +46,10 @@ export default class extends React.Component {
             className="task-overview"
             title={this.props.name}
           >
-            <div dangerouslySetInnerHTML={{__html: marked(this.props.introduction || '')}}/>
+            <div
+              className="markdown"
+              dangerouslySetInnerHTML={{__html: marked(this.props.introduction || '')}}
+            />
           </Card>
         </Col>
         <Col xs={24} md={12}>
