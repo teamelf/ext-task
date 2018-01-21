@@ -87,7 +87,7 @@ class TaskStatisticsController extends AbstractController
             'process' => $statistics,
             'done' => $doneReportCount,
             'total' => $totalReportCount,
-            'progress' => 100.0 * $doneProcess / count($processes)
+            'progress' => count($processes) === 0 ? 0 : 100.0 * $doneProcess / count($processes)
         ]);
     }
 }
