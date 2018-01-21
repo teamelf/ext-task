@@ -85,16 +85,16 @@ export default class extends React.Component {
         <strong>后续计划</strong>
         <Editor
           autosize={{minRows: 5, maxRows: 5}}
-          value={this.state.summary}
-          onChange={e => this.setState({summary: e})}
+          value={this.state.plan}
+          onChange={e => this.setState({plan: e})}
         />
       </div>,
       <div style={{marginBottom: 16}}>
         <strong>风险说明</strong>
         <Editor
           autosize={{minRows: 5, maxRows: 5}}
-          value={this.state.summary}
-          onChange={e => this.setState({summary: e})}
+          value={this.state.risk}
+          onChange={e => this.setState({risk: e})}
         />
       </div>
     ];
