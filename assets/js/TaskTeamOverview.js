@@ -8,7 +8,7 @@
  */
 
 const { Row, Col, Card, Progress, Avatar, Popover, List } = antd;
-import Markdown from 'teamelf/components/Markdown';
+import Editor from 'teamelf/components/Editor';
 
 export default class extends React.Component {
   constructor (props) {
@@ -47,7 +47,7 @@ export default class extends React.Component {
             className="task-overview"
             title={this.props.name}
           >
-            <Markdown content={this.props.introduction}/>
+            <Editor readonly value={this.props.introduction}/>
           </Card>
         </Col>
         <Col xs={24} md={12}>

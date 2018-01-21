@@ -8,7 +8,6 @@
  */
 
 const { Button, Modal, Input, Divider } = antd;
-import Markdown from 'teamelf/components/Markdown';
 import Editor from 'teamelf/components/Editor';
 
 export default class extends React.Component {
@@ -113,21 +112,21 @@ export default class extends React.Component {
             onCancel={this.closeModal.bind(this)}
           >
             <h2>总结</h2>
-            <Markdown
+            <Editor
               style={{border: '1px solid #dcdcdc', padding: 16}}
-              content={this.state.summary}
+              readonly value={this.state.summary}
             />
             <Divider/>
             <h2>后续计划</h2>
-            <Markdown
+            <Editor
               style={{border: '1px solid #dcdcdc', padding: 16}}
-              content={this.state.plan}
+              readonly value={this.state.plan}
             />
             <Divider/>
             <h2>风险说明</h2>
-            <Markdown
+            <Editor
               style={{border: '1px solid #dcdcdc', padding: 16}}
-              content={this.state.risk}
+              readonly value={this.state.risk}
             />
             <Divider/>
           </Modal>

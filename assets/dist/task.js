@@ -1360,10 +1360,10 @@ System.register('teamelf/task/TaskProcessUpdater', [], function (_export, _conte
 });
 'use strict';
 
-System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Markdown', 'teamelf/components/Editor'], function (_export, _context) {
+System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Editor'], function (_export, _context) {
   "use strict";
 
-  var Markdown, Editor, _createClass, _antd, Button, Modal, Input, Divider, _class;
+  var Editor, _createClass, _antd, Button, Modal, Input, Divider, _class;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -1396,9 +1396,7 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Markdown',
   }
 
   return {
-    setters: [function (_teamelfComponentsMarkdown) {
-      Markdown = _teamelfComponentsMarkdown.default;
-    }, function (_teamelfComponentsEditor) {
+    setters: [function (_teamelfComponentsEditor) {
       Editor = _teamelfComponentsEditor.default;
     }],
     execute: function () {
@@ -1608,9 +1606,9 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Markdown',
                     null,
                     '\u603B\u7ED3'
                   ),
-                  React.createElement(Markdown, {
+                  React.createElement(Editor, {
                     style: { border: '1px solid #dcdcdc', padding: 16 },
-                    content: this.state.summary
+                    readonly: true, value: this.state.summary
                   }),
                   React.createElement(Divider, null),
                   React.createElement(
@@ -1618,9 +1616,9 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Markdown',
                     null,
                     '\u540E\u7EED\u8BA1\u5212'
                   ),
-                  React.createElement(Markdown, {
+                  React.createElement(Editor, {
                     style: { border: '1px solid #dcdcdc', padding: 16 },
-                    content: this.state.plan
+                    readonly: true, value: this.state.plan
                   }),
                   React.createElement(Divider, null),
                   React.createElement(
@@ -1628,9 +1626,9 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Markdown',
                     null,
                     '\u98CE\u9669\u8BF4\u660E'
                   ),
-                  React.createElement(Markdown, {
+                  React.createElement(Editor, {
                     style: { border: '1px solid #dcdcdc', padding: 16 },
-                    content: this.state.risk
+                    readonly: true, value: this.state.risk
                   }),
                   React.createElement(Divider, null)
                 )];
@@ -1695,10 +1693,10 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Markdown',
 });
 "use strict";
 
-System.register("teamelf/task/TaskTeamOverview", ["teamelf/components/Markdown"], function (_export, _context) {
+System.register("teamelf/task/TaskTeamOverview", ["teamelf/components/Editor"], function (_export, _context) {
   "use strict";
 
-  var Markdown, _createClass, _antd, Row, Col, Card, Progress, Avatar, Popover, List, _class;
+  var Editor, _createClass, _antd, Row, Col, Card, Progress, Avatar, Popover, List, _class;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -1731,8 +1729,8 @@ System.register("teamelf/task/TaskTeamOverview", ["teamelf/components/Markdown"]
   }
 
   return {
-    setters: [function (_teamelfComponentsMarkdown) {
-      Markdown = _teamelfComponentsMarkdown.default;
+    setters: [function (_teamelfComponentsEditor) {
+      Editor = _teamelfComponentsEditor.default;
     }],
     execute: function () {
       _createClass = function () {
@@ -1827,7 +1825,7 @@ System.register("teamelf/task/TaskTeamOverview", ["teamelf/components/Markdown"]
                     className: "task-overview",
                     title: this.props.name
                   },
-                  React.createElement(Markdown, { content: this.props.introduction })
+                  React.createElement(Editor, { readonly: true, value: this.props.introduction })
                 )
               ),
               React.createElement(
