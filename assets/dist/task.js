@@ -1360,10 +1360,10 @@ System.register('teamelf/task/TaskProcessUpdater', [], function (_export, _conte
 });
 'use strict';
 
-System.register('teamelf/task/TaskReportEditor', [], function (_export, _context) {
+System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Markdown', 'teamelf/components/Editor'], function (_export, _context) {
   "use strict";
 
-  var _createClass, _antd, Button, Modal, Input, Divider, _class;
+  var Markdown, Editor, _createClass, _antd, Button, Modal, Input, Divider, _class;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -1396,7 +1396,11 @@ System.register('teamelf/task/TaskReportEditor', [], function (_export, _context
   }
 
   return {
-    setters: [],
+    setters: [function (_teamelfComponentsMarkdown) {
+      Markdown = _teamelfComponentsMarkdown.default;
+    }, function (_teamelfComponentsEditor) {
+      Editor = _teamelfComponentsEditor.default;
+    }],
     execute: function () {
       _createClass = function () {
         function defineProperties(target, props) {
@@ -1543,11 +1547,11 @@ System.register('teamelf/task/TaskReportEditor', [], function (_export, _context
                   null,
                   '\u603B\u7ED3'
                 ),
-                React.createElement(Input.TextArea, {
+                React.createElement(Editor, {
                   autosize: { minRows: 5, maxRows: 5 },
                   value: _this5.state.summary,
                   onChange: function onChange(e) {
-                    return _this5.setState({ summary: e.target.value });
+                    return _this5.setState({ summary: e });
                   }
                 })
               ), React.createElement(
@@ -1558,11 +1562,11 @@ System.register('teamelf/task/TaskReportEditor', [], function (_export, _context
                   null,
                   '\u540E\u7EED\u8BA1\u5212'
                 ),
-                React.createElement(Input.TextArea, {
+                React.createElement(Editor, {
                   autosize: { minRows: 5, maxRows: 5 },
-                  value: _this5.state.plan,
+                  value: _this5.state.summary,
                   onChange: function onChange(e) {
-                    return _this5.setState({ plan: e.target.value });
+                    return _this5.setState({ summary: e });
                   }
                 })
               ), React.createElement(
@@ -1573,11 +1577,11 @@ System.register('teamelf/task/TaskReportEditor', [], function (_export, _context
                   null,
                   '\u98CE\u9669\u8BF4\u660E'
                 ),
-                React.createElement(Input.TextArea, {
+                React.createElement(Editor, {
                   autosize: { minRows: 5, maxRows: 5 },
-                  value: _this5.state.risk,
+                  value: _this5.state.summary,
                   onChange: function onChange(e) {
-                    return _this5.setState({ risk: e.target.value });
+                    return _this5.setState({ summary: e });
                   }
                 })
               )];
@@ -1604,10 +1608,9 @@ System.register('teamelf/task/TaskReportEditor', [], function (_export, _context
                     null,
                     '\u603B\u7ED3'
                   ),
-                  React.createElement('div', {
-                    className: 'markdown',
+                  React.createElement(Markdown, {
                     style: { border: '1px solid #dcdcdc', padding: 16 },
-                    dangerouslySetInnerHTML: { __html: marked(this.state.summary) }
+                    content: this.state.summary
                   }),
                   React.createElement(Divider, null),
                   React.createElement(
@@ -1615,10 +1618,9 @@ System.register('teamelf/task/TaskReportEditor', [], function (_export, _context
                     null,
                     '\u540E\u7EED\u8BA1\u5212'
                   ),
-                  React.createElement('div', {
-                    className: 'markdown',
+                  React.createElement(Markdown, {
                     style: { border: '1px solid #dcdcdc', padding: 16 },
-                    dangerouslySetInnerHTML: { __html: marked(this.state.plan) }
+                    content: this.state.plan
                   }),
                   React.createElement(Divider, null),
                   React.createElement(
@@ -1626,10 +1628,9 @@ System.register('teamelf/task/TaskReportEditor', [], function (_export, _context
                     null,
                     '\u98CE\u9669\u8BF4\u660E'
                   ),
-                  React.createElement('div', {
-                    className: 'markdown',
+                  React.createElement(Markdown, {
                     style: { border: '1px solid #dcdcdc', padding: 16 },
-                    dangerouslySetInnerHTML: { __html: marked(this.state.risk) }
+                    content: this.state.risk
                   }),
                   React.createElement(Divider, null)
                 )];
@@ -1694,10 +1695,10 @@ System.register('teamelf/task/TaskReportEditor', [], function (_export, _context
 });
 "use strict";
 
-System.register("teamelf/task/TaskTeamOverview", [], function (_export, _context) {
+System.register("teamelf/task/TaskTeamOverview", ["teamelf/components/Markdown"], function (_export, _context) {
   "use strict";
 
-  var _createClass, _antd, Row, Col, Card, Progress, Avatar, Popover, List, _class;
+  var Markdown, _createClass, _antd, Row, Col, Card, Progress, Avatar, Popover, List, _class;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -1730,7 +1731,9 @@ System.register("teamelf/task/TaskTeamOverview", [], function (_export, _context
   }
 
   return {
-    setters: [],
+    setters: [function (_teamelfComponentsMarkdown) {
+      Markdown = _teamelfComponentsMarkdown.default;
+    }],
     execute: function () {
       _createClass = function () {
         function defineProperties(target, props) {
@@ -1824,10 +1827,7 @@ System.register("teamelf/task/TaskTeamOverview", [], function (_export, _context
                     className: "task-overview",
                     title: this.props.name
                   },
-                  React.createElement("div", {
-                    className: "markdown",
-                    dangerouslySetInnerHTML: { __html: marked(this.props.introduction || '') }
-                  })
+                  React.createElement(Markdown, { content: this.props.introduction })
                 )
               ),
               React.createElement(

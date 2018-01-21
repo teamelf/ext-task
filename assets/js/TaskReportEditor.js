@@ -8,6 +8,8 @@
  */
 
 const { Button, Modal, Input, Divider } = antd;
+import Markdown from 'teamelf/components/Markdown';
+import Editor from 'teamelf/components/Editor';
 
 export default class extends React.Component {
   constructor (props) {
@@ -74,26 +76,26 @@ export default class extends React.Component {
       </div>,
       <div style={{marginBottom: 16}}>
         <strong>总结</strong>
-        <Input.TextArea
+        <Editor
           autosize={{minRows: 5, maxRows: 5}}
           value={this.state.summary}
-          onChange={e => this.setState({summary: e.target.value})}
+          onChange={e => this.setState({summary: e})}
         />
       </div>,
       <div style={{marginBottom: 16}}>
         <strong>后续计划</strong>
-        <Input.TextArea
+        <Editor
           autosize={{minRows: 5, maxRows: 5}}
-          value={this.state.plan}
-          onChange={e => this.setState({plan: e.target.value})}
+          value={this.state.summary}
+          onChange={e => this.setState({summary: e})}
         />
       </div>,
       <div style={{marginBottom: 16}}>
         <strong>风险说明</strong>
-        <Input.TextArea
+        <Editor
           autosize={{minRows: 5, maxRows: 5}}
-          value={this.state.risk}
-          onChange={e => this.setState({risk: e.target.value})}
+          value={this.state.summary}
+          onChange={e => this.setState({summary: e})}
         />
       </div>
     ];
@@ -111,24 +113,21 @@ export default class extends React.Component {
             onCancel={this.closeModal.bind(this)}
           >
             <h2>总结</h2>
-            <div
-              className="markdown"
+            <Markdown
               style={{border: '1px solid #dcdcdc', padding: 16}}
-              dangerouslySetInnerHTML={{__html: marked(this.state.summary)}}
+              content={this.state.summary}
             />
             <Divider/>
             <h2>后续计划</h2>
-            <div
-              className="markdown"
+            <Markdown
               style={{border: '1px solid #dcdcdc', padding: 16}}
-              dangerouslySetInnerHTML={{__html: marked(this.state.plan)}}
+              content={this.state.plan}
             />
             <Divider/>
             <h2>风险说明</h2>
-            <div
-              className="markdown"
+            <Markdown
               style={{border: '1px solid #dcdcdc', padding: 16}}
-              dangerouslySetInnerHTML={{__html: marked(this.state.risk)}}
+              content={this.state.risk}
             />
             <Divider/>
           </Modal>
