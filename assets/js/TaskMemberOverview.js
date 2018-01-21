@@ -27,7 +27,10 @@ export default class extends React.Component {
     });
   }
   fetchReports () {
-    return axios.get(`task/${this.props.id}/report`).then(r => {
+    const params = {
+      username: this.props.username
+    };
+    return axios.get(`task/${this.props.id}/report`, {params}).then(r => {
       this.setState({reports: r.data});
       return r;
     });

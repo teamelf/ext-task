@@ -902,7 +902,10 @@ System.register('teamelf/task/TaskMemberOverview', ['teamelf/task/TaskReportEdit
           value: function fetchReports() {
             var _this3 = this;
 
-            return axios.get('task/' + this.props.id + '/report').then(function (r) {
+            var params = {
+              username: this.props.username
+            };
+            return axios.get('task/' + this.props.id + '/report', { params: params }).then(function (r) {
               _this3.setState({ reports: r.data });
               return r;
             });

@@ -12,6 +12,7 @@
 namespace TeamELF\Ext\Task\Api;
 
 use Symfony\Component\HttpFoundation\Response;
+use TeamELF\Core\Member;
 use TeamELF\Exception\HttpNotFoundException;
 use TeamELF\Ext\Task\Task;
 use TeamELF\Ext\Task\TaskReport;
@@ -27,11 +28,12 @@ class ReportListController extends AbstractController
     public function handler(): Response
     {
         $task = Task::find($this->getParameter('taskId'));
-        if (!$task) {
+        $assignee = Member::search($this->request->get('username'));
+        if (!$task || !$assignee) {
             throw new HttpNotFoundException();
         }
         $response = [];
-        foreach (TaskReport::where(['task' => $task]) as $report) {
+        foreach (TaskReport::where(['task' => $task, 'assignee' => $assignee]) as $report) {
             if ($report->can($this->getAuth(), 'item')) {
                 $response[] = [
                     'id' => $report->getId(),
