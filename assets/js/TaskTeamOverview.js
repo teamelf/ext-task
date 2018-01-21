@@ -47,7 +47,7 @@ export default class extends React.Component {
             className="task-overview"
             title={this.props.name}
           >
-            <Editor readonly value={this.props.introduction}/>
+            <Editor preview value={this.props.introduction}/>
           </Card>
         </Col>
         <Col xs={24} md={12}>

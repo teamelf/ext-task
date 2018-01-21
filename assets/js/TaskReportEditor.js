@@ -114,19 +114,19 @@ export default class extends React.Component {
             <h2>总结</h2>
             <Editor
               style={{border: '1px solid #dcdcdc', padding: 16}}
-              readonly value={this.state.summary}
+              preview value={this.state.summary}
             />
             <Divider/>
             <h2>后续计划</h2>
             <Editor
               style={{border: '1px solid #dcdcdc', padding: 16}}
-              readonly value={this.state.plan}
+              preview value={this.state.plan}
             />
             <Divider/>
             <h2>风险说明</h2>
             <Editor
               style={{border: '1px solid #dcdcdc', padding: 16}}
-              readonly value={this.state.risk}
+              preview value={this.state.risk}
             />
             <Divider/>
           </Modal>

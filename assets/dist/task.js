@@ -1608,7 +1608,7 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Editor'], 
                   ),
                   React.createElement(Editor, {
                     style: { border: '1px solid #dcdcdc', padding: 16 },
-                    readonly: true, value: this.state.summary
+                    preview: true, value: this.state.summary
                   }),
                   React.createElement(Divider, null),
                   React.createElement(
@@ -1618,7 +1618,7 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Editor'], 
                   ),
                   React.createElement(Editor, {
                     style: { border: '1px solid #dcdcdc', padding: 16 },
-                    readonly: true, value: this.state.plan
+                    preview: true, value: this.state.plan
                   }),
                   React.createElement(Divider, null),
                   React.createElement(
@@ -1628,7 +1628,7 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Editor'], 
                   ),
                   React.createElement(Editor, {
                     style: { border: '1px solid #dcdcdc', padding: 16 },
-                    readonly: true, value: this.state.risk
+                    preview: true, value: this.state.risk
                   }),
                   React.createElement(Divider, null)
                 )];
@@ -1825,7 +1825,7 @@ System.register("teamelf/task/TaskTeamOverview", ["teamelf/components/Editor"], 
                     className: "task-overview",
                     title: this.props.name
                   },
-                  React.createElement(Editor, { readonly: true, value: this.props.introduction })
+                  React.createElement(Editor, { preview: true, value: this.props.introduction })
                 )
               ),
               React.createElement(
