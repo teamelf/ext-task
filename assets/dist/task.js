@@ -1465,7 +1465,7 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Editor'], 
               risk: this.state.risk
             };
             return axios.post('task/' + this.props.taskId + '/report', data).then(function (r) {
-              _this2.props.onEdit().then(function (r) {
+              _this2.props.onEdit && _this2.props.onEdit().then(function (r) {
                 _this2.closeModal();
               });
             });
@@ -1484,9 +1484,26 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Editor'], 
             });
           }
         }, {
+          key: 'deleteReport',
+          value: function deleteReport() {
+            var _this4 = this;
+
+            antd.Modal.confirm({
+              title: '不可恢复',
+              content: '确定要删除该报告么？',
+              onOk: function onOk() {
+                axios.delete('task/' + _this4.props.taskId + '/report/' + _this4.props.id).then(function (r) {
+                  _this4.props.onEdit && _this4.props.onEdit().then(function (r) {
+                    _this4.closeModal();
+                  });
+                });
+              }
+            });
+          }
+        }, {
           key: 'updateReport',
           value: function updateReport() {
-            var _this4 = this;
+            var _this5 = this;
 
             var data = {
               summary: this.state.summary,
@@ -1494,15 +1511,15 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Editor'], 
               risk: this.state.risk
             };
             return axios.put('task/' + this.props.taskId + '/report/' + this.props.id, data).then(function (r) {
-              _this4.props.onEdit().then(function (r) {
-                _this4.closeModal();
+              _this5.props.onEdit && _this5.props.onEdit().then(function (r) {
+                _this5.closeModal();
               });
             });
           }
         }, {
           key: 'render',
           value: function render() {
-            var _this5 = this;
+            var _this6 = this;
 
             var renderEditors = function renderEditors() {
               return [React.createElement(
@@ -1547,9 +1564,9 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Editor'], 
                 ),
                 React.createElement(Editor, {
                   autosize: { minRows: 5, maxRows: 5 },
-                  value: _this5.state.summary,
+                  value: _this6.state.summary,
                   onChange: function onChange(e) {
-                    return _this5.setState({ summary: e });
+                    return _this6.setState({ summary: e });
                   }
                 })
               ), React.createElement(
@@ -1562,9 +1579,9 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Editor'], 
                 ),
                 React.createElement(Editor, {
                   autosize: { minRows: 5, maxRows: 5 },
-                  value: _this5.state.plan,
+                  value: _this6.state.plan,
                   onChange: function onChange(e) {
-                    return _this5.setState({ plan: e });
+                    return _this6.setState({ plan: e });
                   }
                 })
               ), React.createElement(
@@ -1577,9 +1594,9 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Editor'], 
                 ),
                 React.createElement(Editor, {
                   autosize: { minRows: 5, maxRows: 5 },
-                  value: _this5.state.risk,
+                  value: _this6.state.risk,
                   onChange: function onChange(e) {
-                    return _this5.setState({ risk: e });
+                    return _this6.setState({ risk: e });
                   }
                 })
               )];
@@ -1646,7 +1663,19 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Editor'], 
                     width: '680',
                     title: '编辑报告 #' + this.props.id,
                     visible: this.state.visible,
-                    onOk: this.updateReport.bind(this),
+                    footer: [React.createElement(
+                      Button,
+                      { onClick: this.closeModal.bind(this) },
+                      '\u53D6\u6D88'
+                    ), React.createElement(
+                      Button,
+                      { type: 'danger', onClick: this.deleteReport.bind(this) },
+                      '\u5220\u9664\u8349\u7A3F'
+                    ), React.createElement(
+                      Button,
+                      { type: 'primary', onClick: this.updateReport.bind(this) },
+                      '\u4FDD\u5B58\u8349\u7A3F'
+                    )],
                     onCancel: this.closeModal.bind(this)
                   },
                   renderEditors()

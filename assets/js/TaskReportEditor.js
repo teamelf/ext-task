@@ -36,7 +36,7 @@ export default class extends React.Component {
       risk: this.state.risk,
     };
     return axios.post(`task/${this.props.taskId}/report`, data).then(r => {
-      this.props.onEdit().then(r => {
+      this.props.onEdit && this.props.onEdit().then(r => {
         this.closeModal()
       });
     });
@@ -50,6 +50,19 @@ export default class extends React.Component {
       });
     });
   }
+  deleteReport () {
+    antd.Modal.confirm({
+      title: '不可恢复',
+      content: '确定要删除该报告么？',
+      onOk: () => {
+        axios.delete(`task/${this.props.taskId}/report/${this.props.id}`).then(r => {
+          this.props.onEdit && this.props.onEdit().then(r => {
+            this.closeModal()
+          });
+        });
+      }
+    });
+  }
   updateReport () {
     const data = {
       summary: this.state.summary,
@@ -57,7 +70,7 @@ export default class extends React.Component {
       risk: this.state.risk,
     };
     return axios.put(`task/${this.props.taskId}/report/${this.props.id}`, data).then(r => {
-      this.props.onEdit().then(r => {
+      this.props.onEdit && this.props.onEdit().then(r => {
         this.closeModal()
       });
     });
@@ -141,7 +154,11 @@ export default class extends React.Component {
             width="680"
             title={'编辑报告 #' + this.props.id}
             visible={this.state.visible}
-            onOk={this.updateReport.bind(this)}
+            footer={[
+              <Button onClick={this.closeModal.bind(this)}>取消</Button>,
+              <Button type="danger" onClick={this.deleteReport.bind(this)}>删除草稿</Button>,
+              <Button type="primary" onClick={this.updateReport.bind(this)}>保存草稿</Button>,
+            ]}
             onCancel={this.closeModal.bind(this)}
           >
             {renderEditors()}
