@@ -8,7 +8,7 @@
  */
 
 const { Row, Col, Card, Progress, Avatar, Popover, List } = antd;
-import Editor from 'teamelf/components/Editor';
+import Editor from 'teamelf/common/Editor';
 
 export default class extends React.Component {
   constructor (props) {

@@ -1360,7 +1360,7 @@ System.register('teamelf/task/TaskProcessUpdater', [], function (_export, _conte
 });
 'use strict';
 
-System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Editor'], function (_export, _context) {
+System.register('teamelf/task/TaskReportEditor', ['teamelf/common/Editor'], function (_export, _context) {
   "use strict";
 
   var Editor, _createClass, _antd, Button, Modal, Input, Divider, _class;
@@ -1396,8 +1396,8 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Editor'], 
   }
 
   return {
-    setters: [function (_teamelfComponentsEditor) {
-      Editor = _teamelfComponentsEditor.default;
+    setters: [function (_teamelfCommonEditor) {
+      Editor = _teamelfCommonEditor.default;
     }],
     execute: function () {
       _createClass = function () {
@@ -1722,7 +1722,7 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/components/Editor'], 
 });
 "use strict";
 
-System.register("teamelf/task/TaskTeamOverview", ["teamelf/components/Editor"], function (_export, _context) {
+System.register("teamelf/task/TaskTeamOverview", ["teamelf/common/Editor"], function (_export, _context) {
   "use strict";
 
   var Editor, _createClass, _antd, Row, Col, Card, Progress, Avatar, Popover, List, _class;
@@ -1758,8 +1758,8 @@ System.register("teamelf/task/TaskTeamOverview", ["teamelf/components/Editor"], 
   }
 
   return {
-    setters: [function (_teamelfComponentsEditor) {
-      Editor = _teamelfComponentsEditor.default;
+    setters: [function (_teamelfCommonEditor) {
+      Editor = _teamelfCommonEditor.default;
     }],
     execute: function () {
       _createClass = function () {
