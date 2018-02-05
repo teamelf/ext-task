@@ -397,6 +397,11 @@ System.register('teamelf/task/TaskItem', ['teamelf/layout/Page', 'teamelf/task/T
                 React.createElement(
                   'li',
                   null,
+                  '\u53EF\u4EE5\u66F4\u6539\u4EFB\u52A1\u4FE1\u606F\uFF08\u540D\u79F0\u3001\u63CF\u8FF0\uFF09'
+                ),
+                React.createElement(
+                  'li',
+                  null,
                   '\u53EF\u4EE5\u7EE7\u7EED\u6DFB\u52A0\u65B0\u7684\u4EFB\u52A1\u6D41\u7A0B'
                 ),
                 React.createElement(

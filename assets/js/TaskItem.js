@@ -37,6 +37,7 @@ export default class extends Page {
       content: [
         <div>确定要发布任务么？发布后，您将</div>,
         <ul>
+          <li>可以更改任务信息（名称、描述）</li>
           <li>可以继续添加新的任务流程</li>
           <li>可以指派任务给新成员</li>
           <li><strong>不可</strong>删除该任务</li>
