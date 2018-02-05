@@ -485,7 +485,7 @@ System.register('teamelf/task/TaskItem', ['teamelf/layout/Page', 'teamelf/task/T
                   Radio.Button,
                   { value: 'member_' + username },
                   username,
-                  '\u7684\u89C6\u89D2'
+                  '\u7684\u62A5\u544A'
                 );
               }
             }
@@ -552,7 +552,7 @@ System.register('teamelf/task/TaskItem', ['teamelf/layout/Page', 'teamelf/task/T
                       React.createElement(
                         Radio.Button,
                         { value: 'member_' + window.auth.username },
-                        '\u6211\u7684\u89C6\u89D2'
+                        '\u6211\u7684\u62A5\u544A'
                       ),
                       otherViewer
                     )

@@ -73,7 +73,7 @@ export default class extends Page {
     if (this.mode.match(/^member_/)) {
       const username = this.mode.substr('member_'.length);
       if (window.auth.username !== username) {
-        otherViewer = <Radio.Button value={`member_${username}`}>{username}的视角</Radio.Button>;
+        otherViewer = <Radio.Button value={`member_${username}`}>{username}的报告</Radio.Button>;
       }
     }
     if (this.state.task) {
@@ -97,7 +97,7 @@ export default class extends Page {
               >
                 <Radio.Button value="edit">编辑模式</Radio.Button>
                 <Radio.Button value="team">团队视角</Radio.Button>
-                <Radio.Button value={`member_${window.auth.username}`}>我的视角</Radio.Button>
+                <Radio.Button value={`member_${window.auth.username}`}>我的报告</Radio.Button>
                 {otherViewer}
               </Radio.Group>
             </div>
