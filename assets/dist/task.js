@@ -412,16 +412,6 @@ System.register('teamelf/task/TaskItem', ['teamelf/layout/Page', 'teamelf/task/T
                     null,
                     '\u4E0D\u53EF'
                   ),
-                  '\u66F4\u6539\u4EFB\u52A1\u4FE1\u606F\uFF08\u540D\u79F0\u3001\u63CF\u8FF0\uFF09'
-                ),
-                React.createElement(
-                  'li',
-                  null,
-                  React.createElement(
-                    'strong',
-                    null,
-                    '\u4E0D\u53EF'
-                  ),
                   '\u5220\u9664\u8BE5\u4EFB\u52A1'
                 ),
                 React.createElement(

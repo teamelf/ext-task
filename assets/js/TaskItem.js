@@ -39,7 +39,6 @@ export default class extends Page {
         <ul>
           <li>可以继续添加新的任务流程</li>
           <li>可以指派任务给新成员</li>
-          <li><strong>不可</strong>更改任务信息（名称、描述）</li>
           <li><strong>不可</strong>删除该任务</li>
           <li><strong>不可</strong>更改已有提交报告关联的流程信息</li>
           <li><strong>不可</strong>删除已有提交报告关联的流程</li>
