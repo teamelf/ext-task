@@ -236,6 +236,9 @@ class TaskReport extends AbstractModel
                     return true;
                 }
             case 'item':
+                if (TaskAssignee::count(['task' => $this->getTask(), 'assignee' => $member])) {
+                    return true;
+                }
             case 'update':
             case 'delete':
             case 'submit':
