@@ -1918,6 +1918,7 @@ System.register("teamelf/task/TaskTeamOverview", ["teamelf/common/Editor"], func
                               {
                                 style: {
                                   display: 'inline-block',
+                                  overflow: 'hidden',
                                   height: 24,
                                   textAlign: 'center',
                                   width: 100.0 / _this5.state.processes.length + "%",

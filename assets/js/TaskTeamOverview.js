@@ -95,6 +95,7 @@ export default class extends React.Component {
                         <div
                           style={{
                             display: 'inline-block',
+                            overflow: 'hidden',
                             height: 24,
                             textAlign: 'center',
                             width: `${100.0 / this.state.processes.length}%`,
