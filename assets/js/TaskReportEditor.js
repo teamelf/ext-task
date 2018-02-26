@@ -15,6 +15,7 @@ export default class extends React.Component {
     super(props);
     this.state = {
       visible: false,
+      loading: false,
       summary: '',
       plan: '',
       risk: '',
@@ -35,9 +36,11 @@ export default class extends React.Component {
       plan: this.state.plan,
       risk: this.state.risk,
     };
+    this.setState({loading: true});
     return axios.post(`task/${this.props.taskId}/report`, data).then(r => {
       this.props.onEdit && this.props.onEdit().then(r => {
-        this.closeModal()
+        this.setState({loading: false});
+        this.closeModal();
       });
     });
   }
@@ -55,9 +58,11 @@ export default class extends React.Component {
       title: '不可恢复',
       content: '确定要删除该报告么？',
       onOk: () => {
+        this.setState({loading: true});
         axios.delete(`task/${this.props.taskId}/report/${this.props.id}`).then(r => {
           this.props.onEdit && this.props.onEdit().then(r => {
-            this.closeModal()
+            this.setState({loading: false});
+            this.closeModal();
           });
         });
       }
@@ -69,9 +74,11 @@ export default class extends React.Component {
       plan: this.state.plan,
       risk: this.state.risk,
     };
+    this.setState({loading: true});
     return axios.put(`task/${this.props.taskId}/report/${this.props.id}`, data).then(r => {
       this.props.onEdit && this.props.onEdit().then(r => {
-        this.closeModal()
+        this.setState({loading: false});
+        this.closeModal();
       });
     });
   }
@@ -156,8 +163,8 @@ export default class extends React.Component {
             visible={this.state.visible}
             footer={[
               <Button onClick={this.closeModal.bind(this)}>取消</Button>,
-              <Button type="danger" onClick={this.deleteReport.bind(this)}>删除草稿</Button>,
-              <Button type="primary" onClick={this.updateReport.bind(this)}>保存草稿</Button>,
+              <Button type="danger" onClick={this.deleteReport.bind(this)} loading={this.state.loading}>删除草稿</Button>,
+              <Button type="primary" onClick={this.updateReport.bind(this)} loading={this.state.loading}>保存草稿</Button>,
             ]}
             onCancel={this.closeModal.bind(this)}
           >
@@ -177,7 +184,7 @@ export default class extends React.Component {
           visible={this.state.visible}
           footer={[
             <Button onClick={this.closeModal.bind(this)}>取消</Button>,
-            <Button type="primary" onClick={this.createReport.bind(this)}>保存草稿</Button>
+            <Button type="primary" onClick={this.createReport.bind(this)} loading={this.state.loading}>保存草稿</Button>
           ]}
           onCancel={this.closeModal.bind(this)}
         >

@@ -1429,6 +1429,7 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/common/Editor'], func
 
           _this.state = {
             visible: false,
+            loading: false,
             summary: '',
             plan: '',
             risk: ''
@@ -1459,8 +1460,10 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/common/Editor'], func
               plan: this.state.plan,
               risk: this.state.risk
             };
+            this.setState({ loading: true });
             return axios.post('task/' + this.props.taskId + '/report', data).then(function (r) {
               _this2.props.onEdit && _this2.props.onEdit().then(function (r) {
+                _this2.setState({ loading: false });
                 _this2.closeModal();
               });
             });
@@ -1487,8 +1490,10 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/common/Editor'], func
               title: '不可恢复',
               content: '确定要删除该报告么？',
               onOk: function onOk() {
+                _this4.setState({ loading: true });
                 axios.delete('task/' + _this4.props.taskId + '/report/' + _this4.props.id).then(function (r) {
                   _this4.props.onEdit && _this4.props.onEdit().then(function (r) {
+                    _this4.setState({ loading: false });
                     _this4.closeModal();
                   });
                 });
@@ -1505,8 +1510,10 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/common/Editor'], func
               plan: this.state.plan,
               risk: this.state.risk
             };
+            this.setState({ loading: true });
             return axios.put('task/' + this.props.taskId + '/report/' + this.props.id, data).then(function (r) {
               _this5.props.onEdit && _this5.props.onEdit().then(function (r) {
+                _this5.setState({ loading: false });
                 _this5.closeModal();
               });
             });
@@ -1664,11 +1671,11 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/common/Editor'], func
                       '\u53D6\u6D88'
                     ), React.createElement(
                       Button,
-                      { type: 'danger', onClick: this.deleteReport.bind(this) },
+                      { type: 'danger', onClick: this.deleteReport.bind(this), loading: this.state.loading },
                       '\u5220\u9664\u8349\u7A3F'
                     ), React.createElement(
                       Button,
-                      { type: 'primary', onClick: this.updateReport.bind(this) },
+                      { type: 'primary', onClick: this.updateReport.bind(this), loading: this.state.loading },
                       '\u4FDD\u5B58\u8349\u7A3F'
                     )],
                     onCancel: this.closeModal.bind(this)
@@ -1697,7 +1704,7 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/common/Editor'], func
                     '\u53D6\u6D88'
                   ), React.createElement(
                     Button,
-                    { type: 'primary', onClick: this.createReport.bind(this) },
+                    { type: 'primary', onClick: this.createReport.bind(this), loading: this.state.loading },
                     '\u4FDD\u5B58\u8349\u7A3F'
                   )],
                   onCancel: this.closeModal.bind(this)
