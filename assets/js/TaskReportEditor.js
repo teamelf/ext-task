@@ -96,7 +96,7 @@ export default class extends React.Component {
       <div style={{marginBottom: 16}}>
         <strong>总结</strong>
         <Editor
-          autosize={{minRows: 5, maxRows: 5}}
+          autosize={{minRows: 5, maxRows: 20}}
           value={this.state.summary}
           onChange={e => this.setState({summary: e})}
         />
@@ -104,7 +104,7 @@ export default class extends React.Component {
       <div style={{marginBottom: 16}}>
         <strong>后续计划</strong>
         <Editor
-          autosize={{minRows: 5, maxRows: 5}}
+          autosize={{minRows: 5, maxRows: 20}}
           value={this.state.plan}
           onChange={e => this.setState({plan: e})}
         />
@@ -112,7 +112,7 @@ export default class extends React.Component {
       <div style={{marginBottom: 16}}>
         <strong>风险说明</strong>
         <Editor
-          autosize={{minRows: 5, maxRows: 5}}
+          autosize={{minRows: 5, maxRows: 20}}
           value={this.state.risk}
           onChange={e => this.setState({risk: e})}
         />

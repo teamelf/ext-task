@@ -1565,7 +1565,7 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/common/Editor'], func
                   '\u603B\u7ED3'
                 ),
                 React.createElement(Editor, {
-                  autosize: { minRows: 5, maxRows: 5 },
+                  autosize: { minRows: 5, maxRows: 20 },
                   value: _this6.state.summary,
                   onChange: function onChange(e) {
                     return _this6.setState({ summary: e });
@@ -1580,7 +1580,7 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/common/Editor'], func
                   '\u540E\u7EED\u8BA1\u5212'
                 ),
                 React.createElement(Editor, {
-                  autosize: { minRows: 5, maxRows: 5 },
+                  autosize: { minRows: 5, maxRows: 20 },
                   value: _this6.state.plan,
                   onChange: function onChange(e) {
                     return _this6.setState({ plan: e });
@@ -1595,7 +1595,7 @@ System.register('teamelf/task/TaskReportEditor', ['teamelf/common/Editor'], func
                   '\u98CE\u9669\u8BF4\u660E'
                 ),
                 React.createElement(Editor, {
-                  autosize: { minRows: 5, maxRows: 5 },
+                  autosize: { minRows: 5, maxRows: 20 },
                   value: _this6.state.risk,
                   onChange: function onChange(e) {
                     return _this6.setState({ risk: e });
